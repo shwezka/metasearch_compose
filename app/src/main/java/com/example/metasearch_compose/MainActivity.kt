@@ -9,12 +9,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.metasearch_compose.ui.theme.Metasearch_composeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             Metasearch_composeTheme {
                 // A surface container using the 'background' color from the theme
@@ -22,25 +28,29 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    MainApp()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+val robotoFamily = FontFamily(
+    Font(R.font.roboto_bold, FontWeight.Bold),
+    Font(R.font.roboto_bold_italic, FontWeight.Bold, FontStyle.Italic),
+    Font(R.font.roboto_regular, FontWeight.Normal),
+    Font(R.font.roboto_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.roboto_black, FontWeight.Black),
+    Font(R.font.roboto_black_italic, FontWeight.Black, FontStyle.Italic),
+    Font(R.font.roboto_light, FontWeight.Light),
+    Font(R.font.roboto_light_italic, FontWeight.Light, FontStyle.Italic),
+    Font(R.font.roboto_medium, FontWeight.Medium),
+    Font(R.font.roboto_medium_italic, FontWeight.Medium, FontStyle.Italic),
+    Font(R.font.roboto_thin, FontWeight.Thin),
+    Font(R.font.roboto_thin_italic, FontWeight.Thin, FontStyle.Italic)
+)
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    Metasearch_composeTheme {
-        Greeting("Android")
-    }
+fun MainApp(){
+    LoginPage()
 }
