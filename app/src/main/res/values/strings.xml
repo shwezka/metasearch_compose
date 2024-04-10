@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">metasearch_compose</string>
+    <string name="welcome_message">Добро пожаловать</string>
+    <string name="login_email_pass">Заполните почту и пароль, чтобы продолжить</string>
+    <string name="email_label">Почта</string>
+    <string name="mail_placeholder">***********@mail.com</string>
+    <string name="pass_label">Пароль</string>
 </resources>
