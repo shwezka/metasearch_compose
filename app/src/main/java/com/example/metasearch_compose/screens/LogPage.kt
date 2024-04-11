@@ -92,6 +92,7 @@ fun LoginPage() {
                     color = colorResource(id = R.color.linkColor)
                 )
             }
+            isButtonEnabled = emailInput !="" && passInput!= ""
             Spacer(modifier = Modifier.height(300.dp))
             BottomRowWithAButton(
                 lambda = { /*TODO*/ },

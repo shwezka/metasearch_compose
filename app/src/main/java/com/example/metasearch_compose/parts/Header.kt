@@ -96,7 +96,7 @@ fun PassInput(
     passwordVisible: Boolean,
     passCheckLambda: () -> Unit
 ){
-    Text(text = stringResource(R.string.pass_label))
+    Text(text = stringResource(textId))
     Spacer(modifier = Modifier.height(8.dp))
     OutlinedTextField(
         value = passInput,
