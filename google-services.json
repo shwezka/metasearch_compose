@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275430467876",
+    "project_id": "metasearch-compose",
+    "storage_bucket": "metasearch-compose.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275430467876:android:7e4ef249ca5c68a9e9ebb1",
+        "android_client_info": {
+          "package_name": "com.example.metasearch_compose"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7xST570S505ChlOzERvlC0dg5GwAgwdc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

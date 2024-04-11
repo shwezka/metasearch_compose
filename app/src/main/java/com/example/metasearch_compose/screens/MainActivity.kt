@@ -30,9 +30,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-
-@Composable
-fun MainApp(){
-    LoginPage()
-}

@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
 import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.parts.BottomRowWithAButton
 import com.example.metasearch_compose.parts.EmailInput
 import com.example.metasearch_compose.parts.HeaderText
 import com.example.metasearch_compose.parts.ParagraphText
@@ -55,6 +56,7 @@ fun LoginPage() {
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var checkboxChecked by remember { mutableStateOf(false) }
+    var isButtonEnabled by remember { mutableStateOf(false) }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -91,29 +93,13 @@ fun LoginPage() {
                 )
             }
             Spacer(modifier = Modifier.height(300.dp))
-            Button(
-                onClick = {},
-                shape = RoundedCornerShape(12),
-                modifier = Modifier
-                    .height(46.dp)
-                    .width(342.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor))
-            ) {
-                Text(
-                    text = "Войти",
-                    fontFamily = robotoFamily,
-                    fontSize = 16.sp
-                )
-            }
-            Spacer(modifier = Modifier.height(14.dp))
-            Row {
-                Spacer(modifier = Modifier.width(70.dp))
-                Text(text = "У меня нет аккаунта!")
-                Text(
-                    text = "Создать",
-                    color = colorResource(id = R.color.linkColor)
-                )
-            }
+            BottomRowWithAButton(
+                lambda = { /*TODO*/ },
+                buttonTextId = R.string.login_butt_text,
+                bottomRowTextId = R.string.i_dont_have_an_account,
+                bottomRowTextLinkId =R.string.create_account_link,
+                isButtonEnabled = isButtonEnabled
+            )
         }
     }
 }

@@ -5,4 +5,13 @@
     <string name="email_label">Почта</string>
     <string name="mail_placeholder">***********@mail.com</string>
     <string name="pass_label">Пароль</string>
+    <string name="login_butt_text">Войти</string>
+    <string name="i_dont_have_an_account">У меня нет аккаунта!</string>
+    <string name="create_account_link">Создать</string>
+    <string name="create_an_account">Создать аккаунт</string>
+    <string name="finish_reg">Завершите регистрацию чтобы начать</string>
+    <string name="repeat_pass">Повторите пароль</string>
+    <string name="register">Зарегестрироваться</string>
+    <string name="i_already_have_an_account">У меня уже есть аккаунт!</string>
+    <string name="login">Войти</string>
 </resources>

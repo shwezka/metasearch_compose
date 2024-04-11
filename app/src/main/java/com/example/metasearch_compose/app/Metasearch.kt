@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.metasearch_compose.screens.LoginPage
+import com.example.metasearch_compose.screens.RegScreen
 
 @Composable
 fun MetasearchApp(){
@@ -13,6 +14,7 @@ fun MetasearchApp(){
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        LoginPage()
+//        LoginPage()
+        RegScreen()
     }
 }
