@@ -60,6 +60,7 @@ fun LabelText(
 ){
     Text(
         text = stringResource(id = textId),
+        fontFamily = robotoFamily,
         color = Color.Black
     )
 }
@@ -96,7 +97,7 @@ fun PassInput(
     passwordVisible: Boolean,
     passCheckLambda: () -> Unit
 ){
-    Text(text = stringResource(textId))
+    LabelText(textId)
     Spacer(modifier = Modifier.height(8.dp))
     OutlinedTextField(
         value = passInput,

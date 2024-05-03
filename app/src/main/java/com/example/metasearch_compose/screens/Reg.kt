@@ -1,5 +1,6 @@
 package com.example.metasearch_compose.screens
 
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,11 +17,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.metasearch_compose.R
+import com.example.metasearch_compose.firebase_parts.createFirebaseAccount
 import com.example.metasearch_compose.parts.BottomRowWithAButton
 import com.example.metasearch_compose.parts.EmailInput
 import com.example.metasearch_compose.parts.HeaderText
 import com.example.metasearch_compose.parts.ParagraphText
 import com.example.metasearch_compose.parts.RegistrationPass
+
 
 @Preview(showBackground = true)
 @Composable
@@ -59,9 +62,9 @@ fun RegScreen(){
                 repeatPassCheckLambda = { repeatPasswordVisible = !repeatPasswordVisible }
             )
             isButtonEnabled = passInput == repeatPassInput
-            Spacer(modifier = Modifier.height(325.dp))
+            Spacer(modifier = Modifier.height(300.dp))
             BottomRowWithAButton(
-                lambda = { /*TODO*/ },
+                lambda = { createFirebaseAccount(email = emailInput, password = passInput) },
                 buttonTextId = R.string.register,
                 bottomRowTextId = R.string.i_already_have_an_account,
                 bottomRowTextLinkId = R.string.login,
@@ -69,4 +72,8 @@ fun RegScreen(){
             )
         }
     }
+
+
 }
+
+

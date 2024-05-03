@@ -28,6 +28,8 @@ import com.example.metasearch_compose.parts.HeaderText
 import com.example.metasearch_compose.parts.ParagraphText
 import com.example.metasearch_compose.parts.PassInput
 
+
+
 @Preview(showBackground = true)
 @Composable
 fun LoginPage() {
@@ -36,6 +38,8 @@ fun LoginPage() {
     var passwordVisible by remember { mutableStateOf(false) }
     var checkboxChecked by remember { mutableStateOf(false) }
     var isButtonEnabled by remember { mutableStateOf(false) }
+
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -74,7 +78,9 @@ fun LoginPage() {
             isButtonEnabled = emailInput !="" && passInput!= ""
             Spacer(modifier = Modifier.height(300.dp))
             BottomRowWithAButton(
-                lambda = { /*TODO*/ },
+                lambda = { 
+
+                },
                 buttonTextId = R.string.login_butt_text,
                 bottomRowTextId = R.string.i_dont_have_an_account,
                 bottomRowTextLinkId =R.string.create_account_link,
