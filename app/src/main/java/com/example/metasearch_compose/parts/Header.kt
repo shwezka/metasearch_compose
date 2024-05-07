@@ -1,5 +1,6 @@
 package com.example.metasearch_compose.parts
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -129,7 +130,8 @@ fun BottomRowWithAButton(
     buttonTextId: Int,
     bottomRowTextId: Int,
     bottomRowTextLinkId: Int,
-    isButtonEnabled: Boolean
+    isButtonEnabled: Boolean,
+    textLambda: () -> Unit
 ){
     Button(
         onClick = lambda,
@@ -152,7 +154,8 @@ fun BottomRowWithAButton(
         Text(text = stringResource(id = bottomRowTextId))
         Text(
             text = stringResource(id = bottomRowTextLinkId),
-            color = colorResource(id = R.color.linkColor)
+            color = colorResource(id = R.color.linkColor),
+            modifier = Modifier.clickable { textLambda.invoke() }
         )
     }
 }

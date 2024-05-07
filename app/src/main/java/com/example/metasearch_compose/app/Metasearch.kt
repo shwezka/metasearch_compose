@@ -5,6 +5,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.metasearch_compose.screens.LoginPage
 import com.example.metasearch_compose.screens.RegScreen
 
 @Composable
@@ -13,7 +17,15 @@ fun MetasearchApp(){
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-//        LoginPage()
-        RegScreen()
+    }
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "login"){
+        composable("login"){
+            LoginPage(onNavigateToReg = { navController.navigate("reg") })
+        }
+        composable("reg"){
+            RegScreen(onNavigateToLog = {navController.navigate("login")})
+        }
     }
 }

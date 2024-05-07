@@ -25,9 +25,8 @@ import com.example.metasearch_compose.parts.ParagraphText
 import com.example.metasearch_compose.parts.RegistrationPass
 
 
-@Preview(showBackground = true)
 @Composable
-fun RegScreen(){
+fun RegScreen(onNavigateToLog: ()-> Unit){
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -62,18 +61,17 @@ fun RegScreen(){
                 repeatPassCheckLambda = { repeatPasswordVisible = !repeatPasswordVisible }
             )
             isButtonEnabled = passInput == repeatPassInput
-            Spacer(modifier = Modifier.height(300.dp))
+            Spacer(modifier = Modifier.height(270.dp))
             BottomRowWithAButton(
                 lambda = { createFirebaseAccount(email = emailInput, password = passInput) },
                 buttonTextId = R.string.register,
                 bottomRowTextId = R.string.i_already_have_an_account,
                 bottomRowTextLinkId = R.string.login,
-                isButtonEnabled = isButtonEnabled
+                isButtonEnabled = isButtonEnabled,
+                textLambda = { onNavigateToLog() }
             )
         }
     }
-
-
 }
 
 

@@ -8,7 +8,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.metasearch_compose.app.MetasearchApp
+import com.example.metasearch_compose.screens.LoginPage
+import com.example.metasearch_compose.screens.RegScreen
 import com.example.metasearch_compose.ui.theme.Metasearch_composeTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,6 +30,7 @@ class MainActivity : ComponentActivity() {
                     MetasearchApp()
                 }
             }
+
         }
     }
 }

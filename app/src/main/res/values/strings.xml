@@ -14,4 +14,6 @@
     <string name="register">Зарегестрироваться</string>
     <string name="i_already_have_an_account">У меня уже есть аккаунт!</string>
     <string name="login">Войти</string>
+    <string name="rememver_me">Запомнить меня</string>
+    <string name="forgot_your_pass">Забыли пароль</string>
 </resources>

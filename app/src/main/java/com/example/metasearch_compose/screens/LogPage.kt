@@ -19,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.metasearch_compose.R
@@ -30,9 +31,8 @@ import com.example.metasearch_compose.parts.PassInput
 
 
 
-@Preview(showBackground = true)
 @Composable
-fun LoginPage() {
+fun LoginPage(onNavigateToReg: () -> Unit) {
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -63,12 +63,12 @@ fun LoginPage() {
                     modifier = Modifier.padding(0.dp)
                 )
                 Text(
-                    text = "Запомнить меня",
+                    text = stringResource(R.string.rememver_me),
                     modifier = Modifier.padding(vertical = 13.dp),
                 )
                 Spacer(modifier = Modifier.width(87.dp))
                 Text(
-                    text = "Забыли пароль",
+                    text = stringResource(R.string.forgot_your_pass),
                     modifier = Modifier
                         .padding(vertical = 14.dp)
                         .clickable { },
@@ -84,7 +84,8 @@ fun LoginPage() {
                 buttonTextId = R.string.login_butt_text,
                 bottomRowTextId = R.string.i_dont_have_an_account,
                 bottomRowTextLinkId =R.string.create_account_link,
-                isButtonEnabled = isButtonEnabled
+                isButtonEnabled = isButtonEnabled,
+                textLambda = {onNavigateToReg()}
             )
         }
     }
