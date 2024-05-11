@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.metasearch_compose.screens.LoginPage
+import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
 
 @Composable
@@ -22,10 +23,18 @@ fun MetasearchApp(){
 
     NavHost(navController = navController, startDestination = "login"){
         composable("login"){
-            LoginPage(onNavigateToReg = { navController.navigate("reg") })
+            LoginPage(
+                onNavigateToReg = { navController.navigate("reg") },
+                onNavigateToRecovery = {navController.navigate("recovery")}
+            )
         }
         composable("reg"){
             RegScreen(onNavigateToLog = {navController.navigate("login")})
+        }
+        composable("recovery"){
+            RecoveryScreen(
+                onNavigateToLog = {navController.navigate("login")}
+            )
         }
     }
 }

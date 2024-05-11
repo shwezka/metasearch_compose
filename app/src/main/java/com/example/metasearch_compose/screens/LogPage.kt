@@ -35,7 +35,7 @@ import com.example.metasearch_compose.parts.PassInput
 
 
 @Composable
-fun LoginPage(onNavigateToReg: () -> Unit) {
+fun LoginPage(onNavigateToReg: () -> Unit, onNavigateToRecovery: () -> Unit) {
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -58,7 +58,7 @@ fun LoginPage(onNavigateToReg: () -> Unit) {
             Spacer(modifier = Modifier.height(8.dp))
             ParagraphText(textId = R.string.login_email_pass)
             Spacer(modifier = Modifier.height(28.dp))
-            emailValidation = !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
+            emailValidation = Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
             EmailInput( textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, validatorHasErrors = emailValidation)
             Spacer(modifier = Modifier.height(24.dp))
             PassInput(textId = R.string.pass_label, passInput = passInput, lambda = {passInput = it}, passwordVisible = passwordVisible, passCheckLambda = {passwordVisible = !passwordVisible})
@@ -86,11 +86,11 @@ fun LoginPage(onNavigateToReg: () -> Unit) {
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(vertical = 14.dp)
-                        .clickable { },
+                        .clickable { onNavigateToRecovery() },
                     color = colorResource(id = R.color.linkColor)
                 )
             }
-            isButtonEnabled = emailInput !="" && passInput!= ""
+            isButtonEnabled = emailValidation && passInput!= ""
             Spacer(modifier = Modifier.height(320.dp))
             BottomRowWithAButton(
                 lambda = { 

@@ -17,4 +17,9 @@
     <string name="rememver_me">Запомнить меня</string>
     <string name="forgot_your_pass">Забыли пароль?</string>
     <string name="emailErr">Некорректный формат e-mail</string>
+    <string name="password_recovery_header">Восстановление пароля</string>
+    <string name="password_recovery_subheader">Введите свою почту</string>
+    <string name="password_recovery_button_text">Отправить код</string>
+    <string name="password_recovery_bottom_simple_text">Я вспомнил свой пароль!</string>
+    <string name="password_recovery_bottom_linker_text">Вернуться</string>
 </resources>

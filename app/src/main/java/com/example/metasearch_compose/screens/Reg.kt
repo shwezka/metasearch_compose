@@ -48,7 +48,7 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
             Spacer(modifier = Modifier.height(8.dp))
             ParagraphText(textId = R.string.finish_reg)
             Spacer(modifier = Modifier.height(28.dp))
-            emailValidation = !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
+            emailValidation = Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
             EmailInput(textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, validatorHasErrors = emailValidation)
             Spacer(modifier = Modifier.height(20.dp))
             RegistrationPass(
@@ -63,7 +63,7 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
                 repeatPasswordVisible = repeatPasswordVisible,
                 repeatPassCheckLambda = { repeatPasswordVisible = !repeatPasswordVisible }
             )
-            isButtonEnabled = (passInput == repeatPassInput) && (passInput!="") && (emailInput!="")
+            isButtonEnabled = (passInput == repeatPassInput) && (passInput!="") && (emailValidation)
             Spacer(modifier = Modifier.height(258.dp))
             BottomRowWithAButton(
                 lambda = { createFirebaseAccount(email = emailInput, password = passInput) },

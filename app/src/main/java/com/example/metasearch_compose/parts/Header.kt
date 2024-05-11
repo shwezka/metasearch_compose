@@ -98,10 +98,14 @@ fun EmailInput(
                 color = Color.Gray
             )
         },
-        isError = validatorHasErrors && emailInput!="",
+        isError = !validatorHasErrors && emailInput!="",
         supportingText = {
-            if(validatorHasErrors && emailInput!=""){
-                Text(stringResource(id = R.string.emailErr))
+            if(!validatorHasErrors && emailInput!=""){
+                Text(
+                    stringResource(id = R.string.emailErr),
+                    fontFamily = robotoFamily,
+                    fontSize = 14.sp
+                )
             }
         }
 
