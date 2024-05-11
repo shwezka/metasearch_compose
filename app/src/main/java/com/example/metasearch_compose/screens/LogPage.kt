@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
 import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.firebase_parts.login
 import com.example.metasearch_compose.parts.BottomRowWithAButton
 import com.example.metasearch_compose.parts.EmailInput
 import com.example.metasearch_compose.parts.HeaderText
@@ -35,7 +36,11 @@ import com.example.metasearch_compose.parts.PassInput
 
 
 @Composable
-fun LoginPage(onNavigateToReg: () -> Unit, onNavigateToRecovery: () -> Unit) {
+fun LoginPage(
+    onNavigateToReg: () -> Unit,
+    onNavigateToRecovery: () -> Unit,
+    onNavigateToZat: () -> Unit
+) {
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -59,7 +64,7 @@ fun LoginPage(onNavigateToReg: () -> Unit, onNavigateToRecovery: () -> Unit) {
             ParagraphText(textId = R.string.login_email_pass)
             Spacer(modifier = Modifier.height(28.dp))
             emailValidation = Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
-            EmailInput( textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, validatorHasErrors = emailValidation)
+            EmailInput( textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, emailValidation = emailValidation)
             Spacer(modifier = Modifier.height(24.dp))
             PassInput(textId = R.string.pass_label, passInput = passInput, lambda = {passInput = it}, passwordVisible = passwordVisible, passCheckLambda = {passwordVisible = !passwordVisible})
             Row {
@@ -91,10 +96,11 @@ fun LoginPage(onNavigateToReg: () -> Unit, onNavigateToRecovery: () -> Unit) {
                 )
             }
             isButtonEnabled = emailValidation && passInput!= ""
-            Spacer(modifier = Modifier.height(320.dp))
+            Spacer(modifier = Modifier.height(310.dp))
             BottomRowWithAButton(
-                lambda = { 
-
+                lambda = {
+                    login(emailInput, passInput)
+                    onNavigateToZat()
                 },
                 buttonTextId = R.string.login_butt_text,
                 bottomRowTextId = R.string.i_dont_have_an_account,

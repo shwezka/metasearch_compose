@@ -77,7 +77,7 @@ fun EmailInput(
     textId: Int,
     emailInput: String,
     lambda:(String) -> Unit,
-    validatorHasErrors: Boolean
+    emailValidation: Boolean
 ){
     LabelText(textId = textId)
     Spacer(modifier = Modifier.height(8.dp))
@@ -98,9 +98,9 @@ fun EmailInput(
                 color = Color.Gray
             )
         },
-        isError = !validatorHasErrors && emailInput!="",
+        isError = !emailValidation && emailInput!="",
         supportingText = {
-            if(!validatorHasErrors && emailInput!=""){
+            if(!emailValidation && emailInput!=""){
                 Text(
                     stringResource(id = R.string.emailErr),
                     fontFamily = robotoFamily,
@@ -146,6 +146,16 @@ fun PassInput(
             val description = if (passwordVisible) "Скрыть пароль" else "Показать пароль"
             IconButton(onClick = passCheckLambda) {
                 Icon(imageVector = image, description)
+            }
+        },
+        isError = passInput.length < 6 && passInput!="",
+        supportingText = {
+            if (passInput.length< 6 && passInput!=""){
+                Text(
+                    text = stringResource(id = R.string.short_pass),
+                    fontFamily = robotoFamily,
+                    fontSize = 14.sp
+                )
             }
         }
     )

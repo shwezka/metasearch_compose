@@ -26,7 +26,7 @@ import com.example.metasearch_compose.parts.RegistrationPass
 
 
 @Composable
-fun RegScreen(onNavigateToLog: ()-> Unit){
+fun RegScreen(onNavigateToLog: () -> Unit, onNavigateToZat: () -> Unit){
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -49,7 +49,7 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
             ParagraphText(textId = R.string.finish_reg)
             Spacer(modifier = Modifier.height(28.dp))
             emailValidation = Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
-            EmailInput(textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, validatorHasErrors = emailValidation)
+            EmailInput(textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, emailValidation = emailValidation)
             Spacer(modifier = Modifier.height(20.dp))
             RegistrationPass(
                 passLabelId = R.string.pass_label,
@@ -64,9 +64,12 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
                 repeatPassCheckLambda = { repeatPasswordVisible = !repeatPasswordVisible }
             )
             isButtonEnabled = (passInput == repeatPassInput) && (passInput!="") && (emailValidation)
-            Spacer(modifier = Modifier.height(258.dp))
+            Spacer(modifier = Modifier.height(238.dp))
             BottomRowWithAButton(
-                lambda = { createFirebaseAccount(email = emailInput, password = passInput) },
+                lambda = {
+                    createFirebaseAccount(email = emailInput, password = passInput)
+                    onNavigateToZat()
+                         },
                 buttonTextId = R.string.register,
                 bottomRowTextId = R.string.i_already_have_an_account,
                 bottomRowTextLinkId = R.string.login,

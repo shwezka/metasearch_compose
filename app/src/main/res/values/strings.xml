@@ -22,4 +22,8 @@
     <string name="password_recovery_button_text">Отправить код</string>
     <string name="password_recovery_bottom_simple_text">Я вспомнил свой пароль!</string>
     <string name="password_recovery_bottom_linker_text">Вернуться</string>
+    <string name="short_pass">Пароль должен быть длиннее 6 символов!</string>
+    <string name="pass_reco_dialog_title">Сброс пароля</string>
+    <string name="pass_reco_dialog_text">Вам на почту была отправлена ссылка для сброса пароля от вашего аккаунта. Сбросьте пароль и войдите в приложение</string>
+    <string name="ok">Хорошо</string>
 </resources>
