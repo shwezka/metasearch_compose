@@ -1,6 +1,7 @@
 package com.example.metasearch_compose.screens
 
 
+import android.util.Patterns
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.metasearch_compose.R
 import com.example.metasearch_compose.firebase_parts.createFirebaseAccount
@@ -33,6 +33,8 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
     var repeatPassInput by remember { mutableStateOf("") }
     var repeatPasswordVisible by remember { mutableStateOf(false) }
     var isButtonEnabled by remember { mutableStateOf(false) }
+    var emailValidation by remember { mutableStateOf(false)}
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -46,8 +48,9 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
             Spacer(modifier = Modifier.height(8.dp))
             ParagraphText(textId = R.string.finish_reg)
             Spacer(modifier = Modifier.height(28.dp))
-            EmailInput(textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it})
-            Spacer(modifier = Modifier.height(24.dp))
+            emailValidation = !Patterns.EMAIL_ADDRESS.matcher(emailInput).matches()
+            EmailInput(textId = R.string.email_label, emailInput = emailInput, lambda = {emailInput = it}, validatorHasErrors = emailValidation)
+            Spacer(modifier = Modifier.height(20.dp))
             RegistrationPass(
                 passLabelId = R.string.pass_label,
                 passInput = passInput,
@@ -60,8 +63,8 @@ fun RegScreen(onNavigateToLog: ()-> Unit){
                 repeatPasswordVisible = repeatPasswordVisible,
                 repeatPassCheckLambda = { repeatPasswordVisible = !repeatPasswordVisible }
             )
-            isButtonEnabled = passInput == repeatPassInput
-            Spacer(modifier = Modifier.height(270.dp))
+            isButtonEnabled = (passInput == repeatPassInput) && (passInput!="") && (emailInput!="")
+            Spacer(modifier = Modifier.height(258.dp))
             BottomRowWithAButton(
                 lambda = { createFirebaseAccount(email = emailInput, password = passInput) },
                 buttonTextId = R.string.register,

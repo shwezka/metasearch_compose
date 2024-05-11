@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="linkColor">#FF7576D6</color>
     <color name="buttonColor">#FF7576D6</color>
+    <color name="disabledButtonColor">#FFA7A7A7</color>
+    <color name="bottomRowTextColor">#FF5C636A</color>
 </resources>

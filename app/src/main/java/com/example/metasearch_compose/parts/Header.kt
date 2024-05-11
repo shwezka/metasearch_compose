@@ -1,6 +1,8 @@
 package com.example.metasearch_compose.parts
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -17,10 +19,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -29,6 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
 import com.example.metasearch_compose.app.robotoFamily
+
+
 
 @Composable
 fun HeaderText(
@@ -71,6 +77,7 @@ fun EmailInput(
     textId: Int,
     emailInput: String,
     lambda:(String) -> Unit,
+    validatorHasErrors: Boolean
 ){
     LabelText(textId = textId)
     Spacer(modifier = Modifier.height(8.dp))
@@ -78,13 +85,24 @@ fun EmailInput(
         value = emailInput,
         onValueChange = lambda,
         modifier = Modifier
-            .width(342.dp),
+            .width(370.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+        textStyle = TextStyle(
+            fontFamily = robotoFamily,
+            fontSize = 14.sp,
+            color = Color.Black
+        ),
         placeholder = {
             Text(
                 text = stringResource(R.string.mail_placeholder),
                 color = Color.Gray
             )
+        },
+        isError = validatorHasErrors && emailInput!="",
+        supportingText = {
+            if(validatorHasErrors && emailInput!=""){
+                Text(stringResource(id = R.string.emailErr))
+            }
         }
 
     )
@@ -104,8 +122,13 @@ fun PassInput(
         value = passInput,
         onValueChange = lambda,
         modifier = Modifier
-            .width(342.dp),
+            .width(370.dp),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        textStyle = TextStyle(
+            fontFamily = robotoFamily,
+            fontSize = 14.sp,
+            color = Color.Black
+        ),
         placeholder = {
             Text(
                 text = "***********",
@@ -133,30 +156,47 @@ fun BottomRowWithAButton(
     isButtonEnabled: Boolean,
     textLambda: () -> Unit
 ){
-    Button(
-        onClick = lambda,
-        shape = RoundedCornerShape(12),
-        modifier = Modifier
-            .height(46.dp)
-            .width(342.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.buttonColor)),
-        enabled = isButtonEnabled
-    ) {
-        Text(
-            text = stringResource(id = buttonTextId),
-            fontFamily = robotoFamily,
-            fontSize = 16.sp
-        )
-    }
-    Spacer(modifier = Modifier.height(14.dp))
-    Row {
-        Spacer(modifier = Modifier.width(70.dp))
-        Text(text = stringResource(id = bottomRowTextId))
-        Text(
-            text = stringResource(id = bottomRowTextLinkId),
-            color = colorResource(id = R.color.linkColor),
-            modifier = Modifier.clickable { textLambda.invoke() }
-        )
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    )
+    {
+        Button(
+            onClick = lambda,
+            shape = RoundedCornerShape(12),
+            modifier = Modifier
+                .height(46.dp)
+                .width(370.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = colorResource(id = R.color.buttonColor),
+                disabledContainerColor = colorResource(id = R.color.disabledButtonColor)
+            ),
+            enabled = isButtonEnabled
+        ) {
+            Text(
+                text = stringResource(id = buttonTextId),
+                fontFamily = robotoFamily,
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.white)
+            )
+        }
+        Spacer(modifier = Modifier.height(14.dp))
+        Row {
+//            Spacer(modifier = Modifier.width(70.dp))
+            Text(
+                text = stringResource(id = bottomRowTextId),
+                fontFamily = robotoFamily,
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.bottomRowTextColor)
+            )
+            Text(
+                text = stringResource(id = bottomRowTextLinkId),
+                fontFamily = robotoFamily,
+                fontSize = 16.sp,
+                color = colorResource(id = R.color.linkColor),
+                modifier = Modifier.clickable { textLambda.invoke() }
+            )
+        }
     }
 }
 
