@@ -17,6 +17,7 @@ import com.example.metasearch_compose.screens.LoginPage
 import com.example.metasearch_compose.screens.ProfileEdit
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
+import com.example.metasearch_compose.screens.appscreens.ProfileScreen
 
 @RequiresApi(Build.VERSION_CODES.P)
 @Composable
@@ -65,7 +66,9 @@ fun MetasearchApp(){
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
             ){
-            ProfileEdit()
+            ProfileEdit(
+                onNavigateToProf = {navController.navigate("prof")}
+            )
         }
         composable(
             route = "zat",
@@ -73,6 +76,13 @@ fun MetasearchApp(){
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
 
+        }
+        composable(
+            route = "prof",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ){
+            ProfileScreen()
         }
     }
 }

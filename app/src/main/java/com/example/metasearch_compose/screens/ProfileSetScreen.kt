@@ -31,6 +31,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,7 +45,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
@@ -54,11 +54,18 @@ import com.example.metasearch_compose.parts.AppButton
 import com.example.metasearch_compose.parts.LabelText
 import com.example.metasearch_compose.parts.SimpleInput
 import com.example.metasearch_compose.parts.Users
+import com.google.android.gms.common.api.Scope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.Date
+import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-@Preview(showBackground = true)
+
 @Composable
-fun ProfileEdit(){
+fun ProfileEdit(onNavigateToProf: () -> Unit) {
     var nameInput by remember { mutableStateOf("") }
     var phoneInput by remember { mutableStateOf("") }
     var isButtonEnabled by remember { mutableStateOf(false)}
@@ -130,7 +137,7 @@ fun ProfileEdit(){
 
     val defaultImageResourceId = R.drawable.def_avatar
 
-    val user = imageUri?.let { Users(nameInput, phoneInput, date, it) }
+    val user = imageUri?.let { Users(nameInput, phoneInput, date, it.toString()) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -264,18 +271,20 @@ fun ProfileEdit(){
 
             }
             Spacer(modifier = Modifier.height(24.dp))
-            isButtonEnabled = phoneValidation && nameInput!=""
-            AppButton(
-                lambda = {
-                    if (user != null) {
+            LaunchedEffect(key1 = true) {
+                if (user != null) {
+                    launch {
                         addUserData(user)
                     }
-                },
+                }
+            }
+            isButtonEnabled = phoneValidation && nameInput!=""
+            AppButton(
+                lambda ={onNavigateToProf()},
                 isButtonEnabled = isButtonEnabled,
-                buttonTextId = R.string.continue_text)
+                buttonTextId = R.string.continue_text
+            )
         }
 
     }
-
-
 }
