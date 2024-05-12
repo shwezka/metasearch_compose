@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Metasearch_compose.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/white</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo_2</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/metasearch_text</item>
         <item name="postSplashScreenTheme">@style/Theme.Metasearch_compose</item>
     </style>
 </resources>
