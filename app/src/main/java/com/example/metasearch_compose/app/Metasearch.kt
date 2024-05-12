@@ -1,5 +1,8 @@
 package com.example.metasearch_compose.app
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -9,9 +12,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.metasearch_compose.screens.LoginPage
+import com.example.metasearch_compose.screens.ProfileEdit
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
-import com.example.metasearch_compose.screens.Zatichka
 
 @Composable
 fun MetasearchApp(){
@@ -22,27 +25,44 @@ fun MetasearchApp(){
     }
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login"){
-        composable("login"){
+    NavHost(navController = navController, startDestination = "profSet") {
+        composable(
+            route = "login",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        )
+        {
             LoginPage(
                 onNavigateToReg = { navController.navigate("reg") },
-                onNavigateToRecovery = {navController.navigate("recovery")},
-                onNavigateToZat = {navController.navigate("zatichka")}
+                onNavigateToRecovery = { navController.navigate("recovery") },
+                onNavigateToProfileSet = {navController.navigate("profSet")}
             )
         }
-        composable("reg"){
+        composable(
+            route = "reg",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ) {
             RegScreen(
-                onNavigateToLog = {navController.navigate("login")},
-                onNavigateToZat = {navController.navigate("zatichka")}
+                onNavigateToLog = { navController.navigate("login") },
+                onNavigateToProfileSet = {navController.navigate("profSet")}
             )
         }
-        composable("recovery"){
+        composable(
+            route = "recovery",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ) {
             RecoveryScreen(
-                onNavigateToLog = {navController.navigate("login")},
+                onNavigateToLog = { navController.navigate("login") },
             )
         }
-        composable("zatichka"){
-            Zatichka()
+        composable(
+            route = "profSet",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+            ){
+            ProfileEdit()
         }
     }
 }

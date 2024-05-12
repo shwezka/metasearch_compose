@@ -26,4 +26,14 @@
     <string name="pass_reco_dialog_title">Сброс пароля</string>
     <string name="pass_reco_dialog_text">Вам на почту была отправлена ссылка для сброса пароля от вашего аккаунта. Сбросьте пароль и войдите в приложение</string>
     <string name="ok">Хорошо</string>
+    <string name="fio_label">ФИО</string>
+    <string name="fio_placehlder">Введите ваше ФИО</string>
+    <string name="number_label">Телефон</string>
+    <string name="number_placeholder">+7(000) 000 00 00</string>
+    <string name="birthday_label">Дата Рождения</string>
+    <string name="birthday_select_button">Выберите Дату</string>
+    <string name="source_label">Источники новостей</string>
+    <string name="source_select_button">Выберите платформы</string>
+    <string name="continue_text">Продолжить</string>
+    <string name="phone_err">Некорректный формат номера</string>
 </resources>

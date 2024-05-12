@@ -35,7 +35,6 @@ import com.example.metasearch_compose.R
 import com.example.metasearch_compose.app.robotoFamily
 
 
-
 @Composable
 fun HeaderText(
     textId : Int
@@ -162,6 +161,35 @@ fun PassInput(
 }
 
 @Composable
+fun SimpleInput(
+    textId: Int,
+    input: String,
+    placeholderTextId: Int,
+    lambda:(String) -> Unit,
+){
+    LabelText(textId)
+    Spacer(modifier = Modifier.height(8.dp))
+    OutlinedTextField(
+        value = input,
+        onValueChange = lambda,
+        modifier = Modifier
+            .width(370.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+        textStyle = TextStyle(
+            fontFamily = robotoFamily,
+            fontSize = 14.sp,
+            color = Color.Black
+        ),
+        placeholder = {
+            Text(
+                text = stringResource(id = placeholderTextId),
+                color = Color.Gray
+            )
+        }
+    )
+}
+
+@Composable
 fun BottomRowWithAButton(
     lambda: () -> Unit,
     buttonTextId: Int,
@@ -231,5 +259,32 @@ fun RegistrationPass(
     PassInput(textId = passLabelId, passInput = passInput, lambda = passInputLambda, passwordVisible = passwordVisible, passCheckLambda = passCheckLambda)
     Spacer(modifier = Modifier.height(24.dp))
     PassInput(textId = repeatPassLabelId, passInput = repeatPassInput, lambda = repeatPassInputLambda, passwordVisible = repeatPasswordVisible, passCheckLambda = repeatPassCheckLambda)
+}
+
+@Composable
+fun AppButton(
+    lambda: () -> Unit,
+    isButtonEnabled: Boolean,
+    buttonTextId: Int
+){
+    Button(
+        onClick = lambda,
+        shape = RoundedCornerShape(12),
+        modifier = Modifier
+            .height(46.dp)
+            .width(370.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = colorResource(id = R.color.buttonColor),
+            disabledContainerColor = colorResource(id = R.color.disabledButtonColor)
+        ),
+        enabled = isButtonEnabled
+    ) {
+        Text(
+            text = stringResource(id = buttonTextId),
+            fontFamily = robotoFamily,
+            fontSize = 16.sp,
+            color = colorResource(id = R.color.white)
+        )
+    }
 }
 

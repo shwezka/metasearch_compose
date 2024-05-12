@@ -26,7 +26,10 @@ import com.example.metasearch_compose.parts.RegistrationPass
 
 
 @Composable
-fun RegScreen(onNavigateToLog: () -> Unit, onNavigateToZat: () -> Unit){
+fun RegScreen(
+    onNavigateToLog: () -> Unit,
+    onNavigateToProfileSet: () -> Unit
+){
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
@@ -68,7 +71,7 @@ fun RegScreen(onNavigateToLog: () -> Unit, onNavigateToZat: () -> Unit){
             BottomRowWithAButton(
                 lambda = {
                     createFirebaseAccount(email = emailInput, password = passInput)
-                    onNavigateToZat()
+                    onNavigateToProfileSet()
                          },
                 buttonTextId = R.string.register,
                 bottomRowTextId = R.string.i_already_have_an_account,

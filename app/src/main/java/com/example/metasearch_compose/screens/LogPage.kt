@@ -39,7 +39,7 @@ import com.example.metasearch_compose.parts.PassInput
 fun LoginPage(
     onNavigateToReg: () -> Unit,
     onNavigateToRecovery: () -> Unit,
-    onNavigateToZat: () -> Unit
+    onNavigateToProfileSet: () -> Unit
 ) {
     var emailInput by remember { mutableStateOf("") }
     var passInput by remember { mutableStateOf("") }
@@ -100,7 +100,7 @@ fun LoginPage(
             BottomRowWithAButton(
                 lambda = {
                     login(emailInput, passInput)
-                    onNavigateToZat()
+                    onNavigateToProfileSet()
                 },
                 buttonTextId = R.string.login_butt_text,
                 bottomRowTextId = R.string.i_dont_have_an_account,
