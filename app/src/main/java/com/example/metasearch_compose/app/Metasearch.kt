@@ -1,5 +1,7 @@
 package com.example.metasearch_compose.app
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -16,6 +18,7 @@ import com.example.metasearch_compose.screens.ProfileEdit
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun MetasearchApp(){
     Surface(
@@ -63,6 +66,13 @@ fun MetasearchApp(){
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
             ){
             ProfileEdit()
+        }
+        composable(
+            route = "zat",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ){
+
         }
     }
 }

@@ -1,8 +1,15 @@
 package com.example.metasearch_compose.screens
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.icu.util.Calendar
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Patterns
 import android.widget.DatePicker
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,11 +21,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -32,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,15 +61,15 @@ fun ProfileEdit(){
     var phoneInput by remember { mutableStateOf("") }
     var isButtonEnabled by remember { mutableStateOf(false)}
     var phoneValidation by remember { mutableStateOf(false) }
-    var openAlert by remember { mutableStateOf(false) }
-    var date by remember { mutableStateOf("") }
 
+    var date by remember { mutableStateOf("") }
 
     val year: Int
     val month: Int
     val day: Int
     var stringMonth: String
 
+    //тут обрабатывается ввод даты
     val calendar = Calendar.getInstance()
     year = calendar.get(Calendar.YEAR)
     month = calendar.get(Calendar.MONTH)
@@ -91,6 +98,36 @@ fun ProfileEdit(){
         }, year, month, day
     )
 
+    //тут обрабатывается добавление пикчи
+    var imageUri by remember{ mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
+    val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent())
+    { uri: Uri? ->
+        imageUri = uri
+    }
+
+    imageUri?.let{
+        if(Build.VERSION.SDK_INT < 28){
+            bitmap.value = MediaStore.Images
+                .Media.getBitmap(context.contentResolver, it)
+        }else{
+            val source = ImageDecoder.createSource(context.contentResolver, it)
+            bitmap.value = ImageDecoder.decodeBitmap(source)
+        }
+
+        bitmap.value?.let{btm->
+            Image(
+                bitmap = btm.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier.size(141.dp)
+            )
+        }
+    }
+
+    val defaultImageResourceId = R.drawable.def_avatar // замените на ваш ресурс по умолчанию
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -109,12 +146,32 @@ fun ProfileEdit(){
                 Image(
                     painter = painterResource(id = R.drawable.image_selector),
                     contentDescription = null,
-                    modifier = Modifier.clickable { /*TODO*/ }
+                    modifier = Modifier.clickable { launcher.launch("image/*") }
                 )
-                Image(
-                    painter = painterResource(id = R.drawable.def_avatar),
-                    contentDescription = null
-                )
+                if (imageUri != null) {
+                    imageUri?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
+                        } else {
+                            val source = ImageDecoder.createSource(context.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                        }
+
+                        bitmap.value?.let { btm ->
+                            Image(
+                                bitmap = btm.asImageBitmap(),
+                                contentDescription = null,
+                                modifier = Modifier.size(151.dp)
+                            )
+                        }
+                    }
+                } else {
+                    Image(
+                        painter = painterResource(id = defaultImageResourceId),
+                        contentDescription = null,
+                        modifier = Modifier.size(151.dp)
+                    )
+                }
                 Image(
                     painter = painterResource(id = R.drawable.theme_changer_1),
                     contentDescription = null,
@@ -209,21 +266,6 @@ fun ProfileEdit(){
                 isButtonEnabled = isButtonEnabled,
                 buttonTextId = R.string.continue_text)
         }
-    }
-    if (openAlert){
-        AlertDialog(
-            onDismissRequest = { openAlert = false},
-            title = { Text(text = stringResource(id = R.string.pass_reco_dialog_title))},
-            text = { Text(text = stringResource(id = R.string.pass_reco_dialog_text))},
-            confirmButton = {
-                Button(
-                    onClick = {
-                        openAlert = false
-                    }
-                ) {
-                }
-            })
-
     }
 
 }
