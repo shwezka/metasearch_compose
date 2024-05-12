@@ -28,7 +28,7 @@ fun MetasearchApp(){
     }
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "profSet") {
+    NavHost(navController = navController, startDestination = "login") {
         composable(
             route = "login",
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },

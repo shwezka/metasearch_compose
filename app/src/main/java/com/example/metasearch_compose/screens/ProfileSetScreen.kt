@@ -49,9 +49,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
 import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.firebase_parts.addUserData
 import com.example.metasearch_compose.parts.AppButton
 import com.example.metasearch_compose.parts.LabelText
 import com.example.metasearch_compose.parts.SimpleInput
+import com.example.metasearch_compose.parts.Users
 import java.util.Date
 
 @Preview(showBackground = true)
@@ -126,7 +128,9 @@ fun ProfileEdit(){
         }
     }
 
-    val defaultImageResourceId = R.drawable.def_avatar // замените на ваш ресурс по умолчанию
+    val defaultImageResourceId = R.drawable.def_avatar
+
+    val user = imageUri?.let { Users(nameInput, phoneInput, date, it) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -262,10 +266,16 @@ fun ProfileEdit(){
             Spacer(modifier = Modifier.height(24.dp))
             isButtonEnabled = phoneValidation && nameInput!=""
             AppButton(
-                lambda = { /*TODO*/ },
+                lambda = {
+                    if (user != null) {
+                        addUserData(user)
+                    }
+                },
                 isButtonEnabled = isButtonEnabled,
                 buttonTextId = R.string.continue_text)
         }
+
     }
+
 
 }
