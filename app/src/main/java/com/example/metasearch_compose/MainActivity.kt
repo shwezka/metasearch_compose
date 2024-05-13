@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.metasearch_compose.app.MetasearchApp
+import com.example.metasearch_compose.bottom_nav.MainScreen
 import com.example.metasearch_compose.screens.LoginPage
 import com.example.metasearch_compose.screens.RegScreen
 import com.example.metasearch_compose.ui.theme.Metasearch_composeTheme

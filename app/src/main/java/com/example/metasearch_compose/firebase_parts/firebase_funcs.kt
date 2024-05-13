@@ -95,8 +95,6 @@ internal suspend fun addUserData(user: Users) {
 
 internal suspend fun uploadImageAndGetUrl(imageUri: String): String {
     return suspendCoroutine { continuation ->
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        val userId = currentUser?.uid
         val storageRef = storage.reference
         val imageRef = storageRef.child("profile_pics/${FirebaseAuth.getInstance().currentUser?.uid}_profile_pic")
 

@@ -11,4 +11,7 @@
     <color name="buttonColor">#FF7576D6</color>
     <color name="disabledButtonColor">#FFA7A7A7</color>
     <color name="bottomRowTextColor">#FF5C636A</color>
+    <color name="sub_text">#FF5C636A</color>
+    <color name="error">#FFCA0000</color>
+    <color name="accent">#FF7576D6</color>
 </resources>

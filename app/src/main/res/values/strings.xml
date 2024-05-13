@@ -36,4 +36,18 @@
     <string name="source_select_button">Выберите платформы</string>
     <string name="continue_text">Продолжить</string>
     <string name="phone_err">Некорректный формат номера</string>
+    <string name="history">История</string>
+    <string name="read_news">Прочитанные статьи</string>
+    <string name="black_list">Черный список</string>
+    <string name="settings">Настройки</string>
+    <string name="profile_edit">Редактирование профиля</string>
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="offline_reading">Оффлайн чтение</string>
+    <string name="about_us">О нас</string>
+    <string name="logOut_button">Выход</string>
+    <string name="profile_bottom_bar_name">Profile</string>
+    <string name="home_bottom_bar_name">Home</string>
+    <string name="search_bottom_bar_name">Search</string>
+    <string name="favs_bottom_bar_name">Favorite</string>
+
 </resources>

@@ -73,6 +73,32 @@ fun LabelText(
 }
 
 @Composable
+fun ProfileHeaderText(
+    textId: Int
+){
+    Text(
+        text = stringResource(id = textId),
+        fontFamily = robotoFamily,
+        fontWeight = FontWeight(600),
+        fontSize = 18.sp,
+        color = Color.Black
+    )
+}
+
+@Composable
+fun ProfileButtText(
+    textId: Int
+){
+    Text(
+        text = stringResource(id = textId),
+        fontFamily = robotoFamily,
+        fontWeight = FontWeight(400),
+        fontSize = 14.sp,
+        color = Color.Black
+    )
+}
+
+@Composable
 fun EmailInput(
     textId: Int,
     emailInput: String,
