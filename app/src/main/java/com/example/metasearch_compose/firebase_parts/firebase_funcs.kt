@@ -7,6 +7,7 @@ import com.example.metasearch_compose.parts.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -69,54 +70,43 @@ internal fun sendRecoveryEmail(
         }
 }
 
-internal suspend fun addUserData(user: Users) {
-    val currentUser = FirebaseAuth.getInstance().currentUser
-    val userId = currentUser?.uid
-    val userRef = db.collection("users").document(userId!!)
-
-    // Загружаем изображение в хранилище Firebase и получаем URL
-    val imageUrl = uploadImageAndGetUrl(user.pictureUri)
-
-    // Обновляем данные пользователя в Firestore
-    try {
-        userRef.set(
-            mapOf(
-                "name" to user.name,
-                "phone" to user.phone,
-                "birthdate" to user.birthDate,
-                "profileImageURL" to imageUrl
-            )
-        ).await()
-        Log.d(TAG, "User data updated successfully")
-    } catch (e: Exception) {
-        Log.w(TAG, "Error updating user data", e)
-    }
-}
-
-internal suspend fun uploadImageAndGetUrl(imageUri: String): String {
-    return suspendCoroutine { continuation ->
+internal fun addUserData(user: Users){
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        val userId = currentUser?.uid
+        val userRef = db.collection("users").document(userId!!)
         val storageRef = storage.reference
         val imageRef = storageRef.child("profile_pics/${FirebaseAuth.getInstance().currentUser?.uid}_profile_pic")
 
-        val uploadTask = imageRef.putFile(Uri.parse(imageUri))
+        val uploadTask: UploadTask = imageRef.putFile(Uri.parse(user.pictureUri))
 
-        uploadTask.addOnSuccessListener { _ ->
+        uploadTask.addOnSuccessListener { uploadTaskSnapshot ->
             Log.d(TAG, "Profile image uploaded successfully")
+
+            // Получаем ссылку на загруженное изображение
             imageRef.downloadUrl.addOnSuccessListener { downloadUri ->
-                val imageUrl = downloadUri.toString()
-                Log.d(TAG, "Profile image URL: $imageUrl")
-                continuation.resume(imageUrl)
+                val profileImageURL = downloadUri.toString()
+
+                // Обновляем данные пользователя и ссылку на профильное изображение в базе данных Firestore
+                userRef.set(
+                    mapOf(
+                        "name" to user.name,
+                        "phone" to user.phone,
+                        "birthdate" to user.birthDate,
+                        "profileImageURL" to profileImageURL
+                    )
+                ).addOnSuccessListener {
+                    Log.d(TAG, "User data updated successfully")
+                }.addOnFailureListener { e ->
+                    Log.w(TAG, "Error updating user data", e)
+                }
+
             }.addOnFailureListener { e ->
                 Log.w(TAG, "Error getting download URL", e)
-                continuation.resume("")
             }
         }.addOnFailureListener { e ->
             Log.w(TAG, "Error uploading profile image", e)
-            continuation.resume("")
         }
-    }
 }
-
 
 
 fun getDataFromDB(callback: (Users) -> Unit) {
