@@ -58,7 +58,7 @@ import java.util.Date
 
 @Preview(showBackground = true)
 @Composable
-fun ProfileEdit(){
+fun ProfileEdit(onNavigateToProfile: () -> Unit) {
     var nameInput by remember { mutableStateOf("") }
     var phoneInput by remember { mutableStateOf("") }
     var isButtonEnabled by remember { mutableStateOf(false)}
@@ -130,7 +130,7 @@ fun ProfileEdit(){
 
     val defaultImageResourceId = R.drawable.def_avatar
 
-    val user = imageUri?.let { Users(nameInput, phoneInput, date, it) }
+    val user = imageUri?.let { Users(nameInput, phoneInput, date, it.toString()) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -270,6 +270,7 @@ fun ProfileEdit(){
                     if (user != null) {
                         addUserData(user)
                     }
+                    onNavigateToProfile()
                 },
                 isButtonEnabled = isButtonEnabled,
                 buttonTextId = R.string.continue_text)
