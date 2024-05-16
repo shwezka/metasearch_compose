@@ -7,8 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.metasearch_compose.parts.Users
 import com.example.metasearch_compose.screens.LoginPage
 import com.example.metasearch_compose.screens.ProfileEdit
+import com.example.metasearch_compose.screens.ProfileSet
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
 import com.example.metasearch_compose.screens.appscreens.FavScreen
@@ -19,7 +21,8 @@ import com.example.metasearch_compose.screens.appscreens.SearchScreen
 @Composable
 fun NavGraph(
     navHostController: NavHostController,
-    entryPoint: String
+    entryPoint: String,
+    user: Users
 ){
     NavHost(navController = navHostController, startDestination = entryPoint) {
         composable(
@@ -31,7 +34,7 @@ fun NavGraph(
             LoginPage(
                 onNavigateToReg = { navHostController.navigate("reg") },
                 onNavigateToRecovery = { navHostController.navigate("recovery") },
-                onNavigateToProfileSet = {navHostController.navigate("profSet")}
+                onNavigateToProfile = {navHostController.navigate("prof")}
             )
         }
         composable(
@@ -58,7 +61,7 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
-            ProfileEdit(
+            ProfileSet(
                 onNavigateToProf = {navHostController.navigate("prof")}
             )
         }
@@ -75,7 +78,9 @@ fun NavGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
             ProfileScreen(
-                onNavigateToLog = { navHostController.navigate("login") }
+                onNavigateToLog = { navHostController.navigate("login") },
+                onNavigateToEdit = {navHostController.navigate("profEdit")},
+                user
             )
         }
         composable(
@@ -98,6 +103,16 @@ fun NavGraph(
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
             FavScreen()
+        }
+        composable(
+            route = "profEdit",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ){
+            ProfileEdit(
+                user,
+                onNavigateToProf = {navHostController.navigate("prof")}
+            )
         }
     }
 }

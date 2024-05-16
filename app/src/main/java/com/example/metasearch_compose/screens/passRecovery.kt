@@ -78,7 +78,8 @@ fun RecoveryScreen(onNavigateToLog: () -> Unit) {
                         ) {
                             Text(text = stringResource(R.string.ok))
                         }
-                    })
+                    }
+                )
             }
         }
     }

@@ -33,7 +33,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,11 +55,10 @@ import com.example.metasearch_compose.parts.AppButton
 import com.example.metasearch_compose.parts.LabelText
 import com.example.metasearch_compose.parts.SimpleInput
 import com.example.metasearch_compose.parts.Users
-import kotlinx.coroutines.android.awaitFrame
 import java.util.Date
 
 @Composable
-fun ProfileEdit(onNavigateToProf: () -> Unit) {
+fun ProfileSet(onNavigateToProf: () -> Unit) {
     var nameInput by remember { mutableStateOf("") }
     var phoneInput by remember { mutableStateOf("") }
     var isButtonEnabled by remember { mutableStateOf(false)}

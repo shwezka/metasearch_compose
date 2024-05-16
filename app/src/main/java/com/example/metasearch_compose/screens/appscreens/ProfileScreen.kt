@@ -2,6 +2,7 @@ package com.example.metasearch_compose.screens.appscreens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,31 +14,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.metasearch_compose.R
-import com.example.metasearch_compose.firebase_parts.getDataFromDB
 import com.example.metasearch_compose.parts.Users
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import coil.transform.RoundedCornersTransformation
 import com.example.metasearch_compose.app.robotoFamily
@@ -47,15 +39,19 @@ import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
-fun ProfileScreen(onNavigateToLog: () -> Unit) {
+fun ProfileScreen(
+    onNavigateToLog: () -> Unit,
+    onNavigateToEdit: () -> Unit,
+    user: Users
+) {
     val defaultImageResourceId = R.drawable.def_avatar
-    var user by remember { mutableStateOf(Users()) }
+//    var user by remember { mutableStateOf(Users()) }
 
-    LaunchedEffect(key1 = true) {
-        getDataFromDB { userData ->
-            user = userData
-        }
-    }
+//    LaunchedEffect(key1 = true) {
+//        getDataFromDB { userData ->
+//            user = userData
+//        }
+//    }
 
         val profilePic = rememberImagePainter(
             data = user.pictureUri,
@@ -116,7 +112,16 @@ fun ProfileScreen(onNavigateToLog: () -> Unit) {
                 ProfileButtText(textId = R.string.black_list)
                 Spacer(modifier = Modifier.height(3.dp))
                 ProfileHeaderText(textId = R.string.settings)
-                ProfileButtText(textId = R.string.profile_edit)
+                Text(
+                    text = stringResource(id = R.string.profile_edit),
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(400),
+                    fontSize = 14.sp,
+                    color = Color.Black,
+                    modifier = Modifier.clickable {
+                        onNavigateToEdit()
+                    }
+                )
                 ProfileButtText(textId = R.string.privacy_policy)
                 ProfileButtText(textId = R.string.offline_reading)
                 ProfileButtText(textId = R.string.about_us)

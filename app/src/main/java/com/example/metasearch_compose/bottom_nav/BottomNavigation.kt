@@ -1,7 +1,10 @@
 package com.example.metasearch_compose.bottom_nav
 
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.BottomNavigation
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.BottomNavigationItem
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Text
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -52,6 +55,7 @@ fun BottomNavigationBar(
                         fontSize = 12.sp
                     )
                 },
+                enabled = true,
                 selectedContentColor = colorResource(id = R.color.accent),
                 unselectedContentColor = colorResource(id = R.color.sub_text)
             )
