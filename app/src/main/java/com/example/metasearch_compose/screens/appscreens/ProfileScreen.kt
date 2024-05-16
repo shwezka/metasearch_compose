@@ -32,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import coil.transform.RoundedCornersTransformation
-import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.parts.robotoFamily
 import com.example.metasearch_compose.parts.ProfileButtText
 import com.example.metasearch_compose.parts.ProfileHeaderText
 import com.google.firebase.auth.FirebaseAuth

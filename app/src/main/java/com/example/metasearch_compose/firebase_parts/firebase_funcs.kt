@@ -3,6 +3,8 @@ package com.example.metasearch_compose.firebase_parts
 import android.content.ContentValues.TAG
 import android.net.Uri
 import android.util.Log
+import com.example.metasearch_compose.parts.News
+import com.example.metasearch_compose.parts.Sources
 import com.example.metasearch_compose.parts.Users
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -168,6 +170,54 @@ fun getDataFromDB(callback: (Users) -> Unit) {
         }
         .addOnFailureListener { e ->
             Log.w(TAG, "Error getting user data", e)
+        }
+}
+
+fun addNews(){
+    val ref = db.collection("news").document()
+
+    ref.set(
+        mapOf(
+            "id" to ref.id,
+            "newsTitle" to "Россия нашла альтернативу продаже пиломатериалов в Европу Кто теперь вместо Европы покупает российскую древесину и фанкряж",
+            "newsShortenText" to "В 2023 году в топ-10 стран — импортеров российских пиломатериалов не осталось ни одной европейской страны. Российские лесопромышленники заменили рынки сбыта на азиатские страны, их доля в экспорте выросла до 98% Объем экспорта российских пиломатериалов в 2023 году снизился на 10% относительно предыдущего года и составил 20,7 млн куб. м, следует из статистики федерального лесоучетного учреждения «Рослесинфорг»",
+            "newsFullText" to "В 2023 году в топ-10 стран — импортеров российских пиломатериалов не осталось ни одной европейской страны. Российские лесопромышленники заменили рынки сбыта на азиатские страны, их доля в экспорте выросла до 98%\n\nОбъем экспорта российских пиломатериалов в 2023 году снизился на 10% относительно предыдущего года и составил 20,7 млн куб. м, следует из статистики федерального лесоучетного учреждения «Рослесинфорг», с которой ознакомился РБК. В 2022 году объем экспорта пиломатериалов составил 23 млн куб. м.",
+            "newsSource" to "КИЛ",
+            "newsTheme" to "Россия",
+            "newsDate" to "02 фев, 01:32",
+            "imageSource" to "",
+            "sourceIcon" to ""
+        )
+    )
+}
+
+
+fun getNews(callback: (News) -> Unit) {
+    db.collection("news").document("Fpq02xy7EOLE9cYyqzZr").get()
+        .addOnSuccessListener { result ->
+            val newsSourceId = result.getString("newsSourceId") ?: ""
+            db.collection("sources").document(newsSourceId).get()
+                .addOnSuccessListener { sourceResult ->
+                    val source = sourceResult.getString("name") ?: ""
+                    val sourcePic = sourceResult.getString("image_pic") ?: ""
+                    val sourceGot = Sources(source, sourcePic)
+                    Log.d(TAG, "Successfully received source: $sourceGot")
+                    val newsTitle = result.getString("newsTitle") ?: ""
+                    val newsShortenText = result.getString("newsShortenText") ?: ""
+                    val newsFullText = result.getString("newsFullText") ?: ""
+                    val newsDate = result.getString("newsDate") ?: ""
+                    val newsTheme = result.getString("newsTheme") ?: ""
+                    val newsPic = result.getString("imageSource") ?: ""
+                    val news = News(newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
+                    Log.d(TAG, "News data: $news")
+                    callback(news)
+                }
+                .addOnFailureListener {
+                    Log.d(TAG, "Failed to get source")
+                }
+        }
+        .addOnFailureListener {
+            Log.d(TAG, "Failed to get news")
         }
 }
 

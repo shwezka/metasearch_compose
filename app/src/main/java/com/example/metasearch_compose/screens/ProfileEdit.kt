@@ -53,7 +53,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import coil.transform.RoundedCornersTransformation
 import com.example.metasearch_compose.R
-import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.parts.robotoFamily
 import com.example.metasearch_compose.firebase_parts.updateUserData
 import com.example.metasearch_compose.parts.AppButton
 import com.example.metasearch_compose.parts.LabelText

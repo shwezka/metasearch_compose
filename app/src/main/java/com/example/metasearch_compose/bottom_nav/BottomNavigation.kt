@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.metasearch_compose.R
-import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.parts.robotoFamily
 
 @Composable
 fun BottomNavigationBar(

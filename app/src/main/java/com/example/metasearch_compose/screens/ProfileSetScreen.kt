@@ -49,7 +49,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
-import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.parts.robotoFamily
 import com.example.metasearch_compose.firebase_parts.addUserData
 import com.example.metasearch_compose.parts.AppButton
 import com.example.metasearch_compose.parts.LabelText

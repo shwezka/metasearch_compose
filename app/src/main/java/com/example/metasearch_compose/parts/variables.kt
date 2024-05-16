@@ -1,4 +1,4 @@
-package com.example.metasearch_compose.app
+package com.example.metasearch_compose.parts
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily

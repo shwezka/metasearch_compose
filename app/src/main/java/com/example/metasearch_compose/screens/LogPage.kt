@@ -22,17 +22,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.metasearch_compose.R
-import com.example.metasearch_compose.app.robotoFamily
+import com.example.metasearch_compose.parts.robotoFamily
 import com.example.metasearch_compose.firebase_parts.login
 import com.example.metasearch_compose.parts.BottomRowWithAButton
 import com.example.metasearch_compose.parts.EmailInput
 import com.example.metasearch_compose.parts.HeaderText
 import com.example.metasearch_compose.parts.ParagraphText
 import com.example.metasearch_compose.parts.PassInput
-
 
 
 @Composable
