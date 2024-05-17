@@ -14,46 +14,45 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.DropdownMenu
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Surface
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.metasearch_compose.R
 import com.example.metasearch_compose.parts.HeaderText
 import com.example.metasearch_compose.parts.News
 import com.example.metasearch_compose.parts.NewsCard
+import com.example.metasearch_compose.parts.NewsTextCard
+import com.example.metasearch_compose.parts.robotoFamily
 import java.util.Vector
 
-@Preview(showBackground = true)
 @Composable
 fun HomeScreen(
-    onNavigateToFullNew: () -> Unit,
     newsVector: Vector<News>,
     navHostController: NavHostController
 ) {
-//    var newsVector by remember { mutableStateOf(Vector<News>()) }
-//    newsVector.setSize(10)
-
-
-    LaunchedEffect(key1 = true) {
-//        getNews { newsData ->
-//            news = newsData
-//
-//        }
-//        getAllNews { newsData->
-//            newsVector = newsData
-//        }
-
-    }
     Log.d(TAG, "Полученный вектор:$newsVector")
-//    Log.d(TAG, "Полученная новость:$news")
+    var dropMenuExp by remember { mutableStateOf(false) }
+    var viewType by remember { mutableIntStateOf(1) }
+    var dropDownMenuIconId by remember { mutableIntStateOf(R.drawable.cards_view2) }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -68,13 +67,110 @@ fun HomeScreen(
                 HeaderText(textId = R.string.news_list)
                 Spacer(modifier = Modifier.width(120.dp))
                 Image(
-                    painter = painterResource(id = R.drawable.cards_view2),
+                    painter = painterResource(id = dropDownMenuIconId),
                     contentDescription = null,
                     modifier = Modifier
                         .size(22.dp)
                         .padding(0.dp)
-                        .clickable { }
+                        .clickable { dropMenuExp = true }
                 )
+                DropdownMenu(
+                    expanded = dropMenuExp,
+                    onDismissRequest = { dropMenuExp = false },
+                    modifier = Modifier
+                        .width(346.dp)
+                        .height(227.dp)
+                        .padding(top = 18.dp, start = 8.dp, end = 8.dp, bottom = 10.dp),
+
+                    ){
+                    Text(
+                        text = "СЕТКА ОТОБРАЖЕНИЯ",
+                        fontFamily = robotoFamily,
+                        fontSize = 18.sp,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.height(18.dp))
+                    HorizontalDivider(modifier = Modifier.fillMaxWidth())
+                    Spacer(modifier = Modifier.height(18.dp))
+                    Row(
+                        modifier = Modifier
+                            .clickable {
+                                viewType = 1
+                                dropMenuExp = false
+                                dropDownMenuIconId = R.drawable.cards_view2
+                            }
+                    ) {
+                        if(viewType == 1){
+                            Image(
+                                painter = painterResource(id = R.drawable.card_view_bold),
+                                contentDescription = null,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(18.dp))
+                            Text(
+                                text = "Card",
+                                fontFamily = robotoFamily,
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight(700)
+                            )
+                        } else{
+                            Image(
+                                painter = painterResource(id = R.drawable.cards_view2),
+                                contentDescription = null,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(18.dp))
+                            Text(
+                                text = "Card",
+                                fontFamily = robotoFamily,
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight(400)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(18.dp))
+                    Row(
+                        modifier = Modifier
+                            .clickable {
+                                viewType = 2
+                                dropMenuExp = false
+                                dropDownMenuIconId = R.drawable.textview
+                            }
+                    ) {
+                        if(viewType == 2){
+                            Image(
+                                painter = painterResource(id = R.drawable.text_view_bold),
+                                contentDescription = null,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(18.dp))
+                            Text(
+                                text = "Text",
+                                fontFamily = robotoFamily,
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight(700)
+                            )
+                        }
+                        else{
+                            Image(
+                                painter = painterResource(id = R.drawable.textview),
+                                contentDescription = null,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(18.dp))
+                            Text(
+                                text = "Text",
+                                fontFamily = robotoFamily,
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight(400)
+                            )
+                        }
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(13.dp))
             LazyColumn {
@@ -82,8 +178,29 @@ fun HomeScreen(
 
                     val newsItem = newsVector.getOrNull(index)
                     newsItem?.let {
-                        NewsCard(it, lambda = {navHostController.navigate("fullNew/${index}")})
-                        Log.d("shw", "$index")
+                        when(viewType) {
+                            1 -> {
+                                NewsCard(
+                                    it,
+                                    lambda = { navHostController.navigate("fullNew/${index}") }
+                                )
+                                Log.d("shw", "$index")
+                            }
+                            2->{
+                                NewsTextCard(
+                                    it,
+                                    lambda = { navHostController.navigate("fullNew/${index}") }
+                                )
+                                Log.d("shw", "$index")
+                            }
+                            else -> {
+                                NewsCard(
+                                    it,
+                                    lambda = { navHostController.navigate("fullNew/${index}") })
+
+                            }
+                        }
+
                     }
                     Spacer(modifier = Modifier.height(12.dp))
                     HorizontalDivider(Modifier.fillMaxWidth())

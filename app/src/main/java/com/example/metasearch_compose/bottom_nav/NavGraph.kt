@@ -97,7 +97,6 @@ fun NavGraph(
 //            val index = backStackEntry.arguments!!.getString("index")?.toInt()
 //            Log.d("vl", "input 1) ${index}, 2) ${backStackEntry.arguments!!.getString("index")}")
             HomeScreen(
-                onNavigateToFullNew = {navHostController.navigate("fullNew/{index}")},
                 newsVector,
                 navHostController
             )

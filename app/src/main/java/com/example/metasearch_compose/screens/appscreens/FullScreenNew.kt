@@ -1,10 +1,14 @@
 package com.example.metasearch_compose.screens.appscreens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -25,12 +29,6 @@ fun FullScreenNew(
     @PreviewParameter(NewsProvider::class) news: News
 //    news: News
 ){
-    val sourcePic = rememberImagePainter(
-        data = news.source.sourcePic,
-        builder = {
-            crossfade(true)
-        }
-    )
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
@@ -49,6 +47,11 @@ fun FullScreenNew(
                     builder = {
                         crossfade(true)
                     }
+                )
+                Image(
+                    painter = newsPic,
+                    contentDescription = null,
+                    modifier = Modifier.width(346.dp).height(213.dp)
                 )
             }
             NewsText(text = news.newsText)

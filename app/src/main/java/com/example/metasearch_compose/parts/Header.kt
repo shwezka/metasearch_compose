@@ -425,12 +425,98 @@ fun NewsCard(
     }
 }
 
+@Composable
+fun NewsTextCard(
+    news: News,
+//    news: News,
+    lambda: () -> Unit
+
+){
+    Card(
+        modifier = Modifier
+            .width(346.dp)
+            .height(260.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(0f),
+        onClick = lambda
+    ){
+        val sourcePic = rememberImagePainter(
+            data = news.source.sourcePic,
+            builder = {
+                crossfade(true)
+            }
+        )
+        val newsPic = rememberImagePainter(
+            data = news.newsImage,
+            builder = {
+                crossfade(true)
+            }
+        )
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(30.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = sourcePic,
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+            Column{
+                Text(
+                    text = "${news.newsTheme}  ${news.source.sourceName}",
+                    color = Color.Black,
+                    fontSize = 12.sp,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(400),
+                    modifier = Modifier.padding(0.dp),
+                    lineHeight = 1.sp
+                )
+                Text(
+                    text = news.newsDate,
+                    color = Color.Gray,
+                    fontSize = 10.sp,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(400),
+                    modifier = Modifier.padding(0.dp),
+                    lineHeight = 1.sp
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(5.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = news.newsTitle,
+                color = Color.Black,
+                fontWeight = FontWeight(500),
+                fontSize = 14.sp,
+                lineHeight = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp)
+            )
+        }
+        Text(
+            text = news.newsShortenText,
+            fontFamily = robotoFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight(400),
+            color = Color.Black,
+            lineHeight = 14.sp
+        )
+    }
+}
+
 
 @Composable
 fun NewsUpperRow(
     @PreviewParameter(NewsProvider::class) news: News,
-
-
 ){
     val sourcePic = rememberImagePainter(
         data = news.source.sourcePic,
@@ -472,7 +558,7 @@ fun NewsUpperRow(
                 lineHeight = 1.sp
             )
         }
-        Spacer(modifier = Modifier.width(180.dp))
+        Spacer(modifier = Modifier.width(170.dp))
         Image(
             painter = painterResource(id = R.drawable.share),
             contentDescription = null,
