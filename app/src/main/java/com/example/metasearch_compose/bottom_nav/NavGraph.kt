@@ -25,7 +25,6 @@ fun NavGraph(
     navHostController: NavHostController,
     entryPoint: String,
     user: Users,
-    newsVector: Vector<News>
 ){
     NavHost(navController = navHostController, startDestination = entryPoint) {
         composable(
@@ -91,7 +90,7 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
-            HomeScreen(newsVector)
+            HomeScreen()
         }
         composable(
             route = "search",

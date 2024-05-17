@@ -184,14 +184,13 @@ fun addNews(){
 
     ref.set(
         mapOf(
-            "id" to ref.id,
             "newsTitle" to "Россия нашла альтернативу продаже пиломатериалов в Европу Кто теперь вместо Европы покупает российскую древесину и фанкряж",
             "newsShortenText" to "В 2023 году в топ-10 стран — импортеров российских пиломатериалов не осталось ни одной европейской страны. Российские лесопромышленники заменили рынки сбыта на азиатские страны, их доля в экспорте выросла до 98% Объем экспорта российских пиломатериалов в 2023 году снизился на 10% относительно предыдущего года и составил 20,7 млн куб. м, следует из статистики федерального лесоучетного учреждения «Рослесинфорг»",
             "newsFullText" to "В 2023 году в топ-10 стран — импортеров российских пиломатериалов не осталось ни одной европейской страны. Российские лесопромышленники заменили рынки сбыта на азиатские страны, их доля в экспорте выросла до 98%\n\nОбъем экспорта российских пиломатериалов в 2023 году снизился на 10% относительно предыдущего года и составил 20,7 млн куб. м, следует из статистики федерального лесоучетного учреждения «Рослесинфорг», с которой ознакомился РБК. В 2022 году объем экспорта пиломатериалов составил 23 млн куб. м.",
-            "newsSource" to "КИЛ",
+            "newsSourceId" to "eR6BNtv0z6PafLIMBjeZ",
             "newsTheme" to "Россия",
             "newsDate" to "02 фев, 01:32",
-            "imageSource" to "",
+            "imageSource" to "https://firebasestorage.googleapis.com/v0/b/metasearch-compose.appspot.com/o/news_pictures%2Fnews1_image.jpg?alt=media&token=df80852c-0d23-4215-8330-6ce9a29b4741",
             "sourceIcon" to ""
         )
     )
@@ -229,7 +228,7 @@ fun getNews(callback: (News) -> Unit) {
 
 fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO).launch {
     val vector = Vector<News>()
-    vector.setSize(10)
+
     var counter = 0
 
     val news = db.collection("news").get().await()
@@ -249,7 +248,7 @@ fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO
             val newsTheme = new.getString("newsTheme") ?: ""
             val newsPic = new.getString("imageSource") ?: ""
             val newsGot = News(newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
-
+            vector.setSize(news.size())
             vector[counter] = newsGot
             counter++
         }

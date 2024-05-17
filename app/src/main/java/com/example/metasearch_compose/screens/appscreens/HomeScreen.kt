@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import coil.transform.RoundedCornersTransformation
 import com.example.metasearch_compose.R
+import com.example.metasearch_compose.firebase_parts.addNews
 import com.example.metasearch_compose.firebase_parts.getAllNews
 import com.example.metasearch_compose.firebase_parts.getNews
 import com.example.metasearch_compose.parts.HeaderText
@@ -49,22 +50,21 @@ import java.util.Vector
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(newsVector: Vector<News>){
-    var news by remember { mutableStateOf(News()) }
-//    var newsVector by remember { mutableStateOf(Vector<News>()) }
-//    newsVector.setSize(10)
+fun HomeScreen(){
+    var newsVector by remember { mutableStateOf(Vector<News>()) }
+    newsVector.setSize(10)
+
+
+    LaunchedEffect(key1 = true) {
+//        getNews { newsData ->
+//            news = newsData
 //
-//
-//    LaunchedEffect(key1 = true) {
-////        getNews { newsData ->
-////            news = newsData
-////
-////        }
-//        getAllNews { newsData->
-//            newsVector = newsData
 //        }
-//
-//    }
+        getAllNews { newsData->
+            newsVector = newsData
+        }
+
+    }
     Log.d(TAG, "Полученный вектор:$newsVector")
 //    Log.d(TAG, "Полученная новость:$news")
     Surface(
@@ -91,7 +91,7 @@ fun HomeScreen(newsVector: Vector<News>){
             }
             Spacer(modifier = Modifier.height(13.dp))
             LazyColumn {
-                items(10) { index ->
+                items(newsVector.size) { index ->
                     val newsItem = newsVector.getOrNull(index)
                     newsItem?.let { NewsCard(it) }
                     Spacer(modifier = Modifier.height(12.dp))
@@ -99,6 +99,7 @@ fun HomeScreen(newsVector: Vector<News>){
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             }
+
         }
     }
 }

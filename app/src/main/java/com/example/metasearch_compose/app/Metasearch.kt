@@ -37,20 +37,20 @@ fun MetasearchApp(){
     var user by remember { mutableStateOf(Users()) }
     val navController = rememberNavController()
     var entryPoint by remember { mutableStateOf("login") }
-    var newsVector by remember { mutableStateOf(Vector<News>()) }
-    newsVector.setSize(10)
+//    var newsVector by remember { mutableStateOf(Vector<News>()) }
 
     if(FirebaseAuth.getInstance().currentUser != null){
         LaunchedEffect(key1 = true) {
             getDataFromDB { userData ->
                 user = userData
             }
-            getAllNews { newsData->
-                newsVector = newsData
-            }
+//            getAllNews { newsData->
+//                newsVector.setSize(newsData.size)
+//                newsVector = newsData
+//            }
 
         }
-        entryPoint = "prof"
+        entryPoint = "home"
     }
 
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -68,7 +68,7 @@ fun MetasearchApp(){
                 BottomNavigationBar(navController = navController)
             }
         ) {
-            NavGraph(navHostController = navController, entryPoint = entryPoint, user, newsVector)
+            NavGraph(navHostController = navController, entryPoint = entryPoint, user)
         }
     } else {
         Surface(
