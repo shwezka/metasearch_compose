@@ -18,13 +18,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.metasearch_compose.bottom_nav.BottomNavigationBar
 import com.example.metasearch_compose.bottom_nav.NavGraph
+import com.example.metasearch_compose.firebase_parts.getAllNews
 import com.example.metasearch_compose.firebase_parts.getDataFromDB
+import com.example.metasearch_compose.parts.News
 import com.example.metasearch_compose.parts.Users
 import com.example.metasearch_compose.screens.LoginPage
 import com.example.metasearch_compose.screens.ProfileSet
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
 import com.google.firebase.auth.FirebaseAuth
+import java.util.Vector
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.P)
@@ -34,11 +37,16 @@ fun MetasearchApp(){
     var user by remember { mutableStateOf(Users()) }
     val navController = rememberNavController()
     var entryPoint by remember { mutableStateOf("login") }
+    var newsVector by remember { mutableStateOf(Vector<News>()) }
+    newsVector.setSize(10)
 
     if(FirebaseAuth.getInstance().currentUser != null){
         LaunchedEffect(key1 = true) {
             getDataFromDB { userData ->
                 user = userData
+            }
+            getAllNews { newsData->
+                newsVector = newsData
             }
 
         }
@@ -60,7 +68,7 @@ fun MetasearchApp(){
                 BottomNavigationBar(navController = navController)
             }
         ) {
-            NavGraph(navHostController = navController, entryPoint = entryPoint, user)
+            NavGraph(navHostController = navController, entryPoint = entryPoint, user, newsVector)
         }
     } else {
         Surface(

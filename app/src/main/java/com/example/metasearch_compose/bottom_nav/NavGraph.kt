@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.metasearch_compose.parts.News
 import com.example.metasearch_compose.parts.Users
 import com.example.metasearch_compose.screens.LoginPage
 import com.example.metasearch_compose.screens.ProfileEdit
@@ -17,12 +18,14 @@ import com.example.metasearch_compose.screens.appscreens.FavScreen
 import com.example.metasearch_compose.screens.appscreens.HomeScreen
 import com.example.metasearch_compose.screens.appscreens.ProfileScreen
 import com.example.metasearch_compose.screens.appscreens.SearchScreen
+import java.util.Vector
 
 @Composable
 fun NavGraph(
     navHostController: NavHostController,
     entryPoint: String,
-    user: Users
+    user: Users,
+    newsVector: Vector<News>
 ){
     NavHost(navController = navHostController, startDestination = entryPoint) {
         composable(
@@ -88,7 +91,7 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
-            HomeScreen()
+            HomeScreen(newsVector)
         }
         composable(
             route = "search",

@@ -10,7 +10,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import java.util.Vector
 
 
 val storage = FirebaseStorage.getInstance()
@@ -159,11 +165,11 @@ fun getDataFromDB(callback: (Users) -> Unit) {
     val userId = FirebaseAuth.getInstance().currentUser?.uid
 
     db.collection("users").document(userId!!).get()
-        .addOnSuccessListener { result ->
-            val name = result.getString("name") ?: ""
-            val phone = result.getString("phone") ?: ""
-            val birthdate = result.getString("birthdate") ?: ""
-            val pictureURI = result.getString("profileImageURL")?: ""
+        .addOnSuccessListener { new ->
+            val name = new.getString("name") ?: ""
+            val phone = new.getString("phone") ?: ""
+            val birthdate = new.getString("birthdate") ?: ""
+            val pictureURI = new.getString("profileImageURL")?: ""
 
             val userData = Users(name, phone, birthdate, pictureURI)
             callback(userData)
@@ -194,20 +200,20 @@ fun addNews(){
 
 fun getNews(callback: (News) -> Unit) {
     db.collection("news").document("Fpq02xy7EOLE9cYyqzZr").get()
-        .addOnSuccessListener { result ->
-            val newsSourceId = result.getString("newsSourceId") ?: ""
+        .addOnSuccessListener { new ->
+            val newsSourceId = new.getString("newsSourceId") ?: ""
             db.collection("sources").document(newsSourceId).get()
                 .addOnSuccessListener { sourceResult ->
                     val source = sourceResult.getString("name") ?: ""
                     val sourcePic = sourceResult.getString("image_pic") ?: ""
                     val sourceGot = Sources(source, sourcePic)
                     Log.d(TAG, "Successfully received source: $sourceGot")
-                    val newsTitle = result.getString("newsTitle") ?: ""
-                    val newsShortenText = result.getString("newsShortenText") ?: ""
-                    val newsFullText = result.getString("newsFullText") ?: ""
-                    val newsDate = result.getString("newsDate") ?: ""
-                    val newsTheme = result.getString("newsTheme") ?: ""
-                    val newsPic = result.getString("imageSource") ?: ""
+                    val newsTitle = new.getString("newsTitle") ?: ""
+                    val newsShortenText = new.getString("newsShortenText") ?: ""
+                    val newsFullText = new.getString("newsFullText") ?: ""
+                    val newsDate = new.getString("newsDate") ?: ""
+                    val newsTheme = new.getString("newsTheme") ?: ""
+                    val newsPic = new.getString("imageSource") ?: ""
                     val news = News(newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
                     Log.d(TAG, "News data: $news")
                     callback(news)
@@ -219,6 +225,39 @@ fun getNews(callback: (News) -> Unit) {
         .addOnFailureListener {
             Log.d(TAG, "Failed to get news")
         }
+}
+
+fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO).launch {
+    val vector = Vector<News>()
+    vector.setSize(10)
+    var counter = 0
+
+    val news = db.collection("news").get().await()
+
+    val deferredTasks = news.documents.map { new ->
+        async {
+            val newsSourceId = new.getString("newsSourceId") ?: ""
+            val sourceResult = db.collection("sources").document(newsSourceId).get().await()
+            val source = sourceResult.getString("name") ?: ""
+            val sourcePic = sourceResult.getString("image_pic") ?: ""
+            val sourceGot = Sources(source, sourcePic)
+
+            val newsTitle = new.getString("newsTitle") ?: ""
+            val newsShortenText = new.getString("newsShortenText") ?: ""
+            val newsFullText = new.getString("newsFullText") ?: ""
+            val newsDate = new.getString("newsDate") ?: ""
+            val newsTheme = new.getString("newsTheme") ?: ""
+            val newsPic = new.getString("imageSource") ?: ""
+            val newsGot = News(newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
+
+            vector[counter] = newsGot
+            counter++
+        }
+    }
+
+    deferredTasks.awaitAll()
+
+    callback(vector)
 }
 
 //private fun codeGenerator() : Int{
