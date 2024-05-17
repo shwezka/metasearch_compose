@@ -4,7 +4,6 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,34 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Surface
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
-import coil.transform.RoundedCornersTransformation
+import androidx.navigation.NavHostController
 import com.example.metasearch_compose.R
-import com.example.metasearch_compose.firebase_parts.addNews
-import com.example.metasearch_compose.firebase_parts.getAllNews
-import com.example.metasearch_compose.firebase_parts.getNews
 import com.example.metasearch_compose.parts.HeaderText
 import com.example.metasearch_compose.parts.News
 import com.example.metasearch_compose.parts.NewsCard
@@ -50,9 +33,13 @@ import java.util.Vector
 
 @Preview(showBackground = true)
 @Composable
-fun HomeScreen(){
-    var newsVector by remember { mutableStateOf(Vector<News>()) }
-    newsVector.setSize(10)
+fun HomeScreen(
+    onNavigateToFullNew: () -> Unit,
+    newsVector: Vector<News>,
+    navHostController: NavHostController
+) {
+//    var newsVector by remember { mutableStateOf(Vector<News>()) }
+//    newsVector.setSize(10)
 
 
     LaunchedEffect(key1 = true) {
@@ -60,9 +47,9 @@ fun HomeScreen(){
 //            news = newsData
 //
 //        }
-        getAllNews { newsData->
-            newsVector = newsData
-        }
+//        getAllNews { newsData->
+//            newsVector = newsData
+//        }
 
     }
     Log.d(TAG, "Полученный вектор:$newsVector")
@@ -92,8 +79,12 @@ fun HomeScreen(){
             Spacer(modifier = Modifier.height(13.dp))
             LazyColumn {
                 items(newsVector.size) { index ->
+
                     val newsItem = newsVector.getOrNull(index)
-                    newsItem?.let { NewsCard(it) }
+                    newsItem?.let {
+                        NewsCard(it, lambda = {navHostController.navigate("fullNew/${index}")})
+                        Log.d("shw", "$index")
+                    }
                     Spacer(modifier = Modifier.height(12.dp))
                     HorizontalDivider(Modifier.fillMaxWidth())
                     Spacer(modifier = Modifier.height(12.dp))

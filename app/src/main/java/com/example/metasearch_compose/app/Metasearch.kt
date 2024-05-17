@@ -37,18 +37,17 @@ fun MetasearchApp(){
     var user by remember { mutableStateOf(Users()) }
     val navController = rememberNavController()
     var entryPoint by remember { mutableStateOf("login") }
-//    var newsVector by remember { mutableStateOf(Vector<News>()) }
+    var newsVector by remember { mutableStateOf(Vector<News>()) }
 
     if(FirebaseAuth.getInstance().currentUser != null){
         LaunchedEffect(key1 = true) {
             getDataFromDB { userData ->
                 user = userData
             }
-//            getAllNews { newsData->
-//                newsVector.setSize(newsData.size)
-//                newsVector = newsData
-//            }
-
+            getAllNews { newsData->
+                newsVector.setSize(newsData.size)
+                newsVector = newsData
+            }
         }
         entryPoint = "home"
     }
@@ -61,14 +60,14 @@ fun MetasearchApp(){
         currentRoute != "reg" &&
         currentRoute != "recovery" &&
         currentRoute != "profSet" &&
-        currentRoute != "settings" // Добавлено условие для страницы "settings"
+        currentRoute != "profEdit" // Добавлено условие для страницы "settings"
     ){
         Scaffold(
             bottomBar = {
                 BottomNavigationBar(navController = navController)
             }
         ) {
-            NavGraph(navHostController = navController, entryPoint = entryPoint, user)
+            NavGraph(navHostController = navController, entryPoint = entryPoint, user, newsVector)
         }
     } else {
         Surface(

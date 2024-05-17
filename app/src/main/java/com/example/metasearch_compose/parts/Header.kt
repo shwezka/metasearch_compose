@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -328,11 +329,12 @@ fun AppButton(
         )
     }
 }
-@Preview(showBackground = true)
+
 @Composable
 fun NewsCard(
-//    @PreviewParameter(NewsProvider::class) news: News
     news: News,
+//    news: News,
+    lambda: () -> Unit
 
 ){
     Card(
@@ -340,7 +342,8 @@ fun NewsCard(
             .width(346.dp)
             .height(260.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        shape = RoundedCornerShape(0f)
+        shape = RoundedCornerShape(0f),
+        onClick = lambda
     ){
         val sourcePic = rememberImagePainter(
             data = news.source.sourcePic,
@@ -366,11 +369,8 @@ fun NewsCard(
                 modifier = Modifier.size(30.dp)
             )
 
-                Spacer(modifier = Modifier.width(12.dp))
-            Column(
-//                verticalArrangement = Arrangement.Center,
-//                modifier = Modifier.height(25.dp).fillMaxWidth()
-            ) {
+            Spacer(modifier = Modifier.width(12.dp))
+            Column{
                 Text(
                     text = "${news.newsTheme}  ${news.source.sourceName}",
                     color = Color.Black,
@@ -423,5 +423,96 @@ fun NewsCard(
             lineHeight = 14.sp
         )
     }
+}
+
+
+@Composable
+fun NewsUpperRow(
+    @PreviewParameter(NewsProvider::class) news: News,
+
+
+){
+    val sourcePic = rememberImagePainter(
+        data = news.source.sourcePic,
+        builder = {
+            crossfade(true)
+        }
+    )
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(30.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(painter = painterResource(id = R.drawable.back), contentDescription = null)
+        Spacer(modifier = Modifier.width(5.dp))
+        Image(
+            painter = sourcePic,
+            contentDescription = null,
+            modifier = Modifier.size(30.dp)
+            )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column{
+            Text(
+                text = "${news.newsTheme}  ${news.source.sourceName}",
+                color = Color.Black,
+                fontSize = 12.sp,
+                fontFamily = robotoFamily,
+                fontWeight = FontWeight(400),
+                modifier = Modifier.padding(0.dp),
+                lineHeight = 1.sp
+            )
+            Text(
+                text = news.newsDate,
+                color = Color.Gray,
+                fontSize = 10.sp,
+                fontFamily = robotoFamily,
+                fontWeight = FontWeight(400),
+                modifier = Modifier.padding(0.dp),
+                lineHeight = 1.sp
+            )
+        }
+        Spacer(modifier = Modifier.width(180.dp))
+        Image(
+            painter = painterResource(id = R.drawable.share),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Image(
+            painter = painterResource(id = R.drawable.favs),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+@Composable
+fun NewsHeaderText(
+    header: String
+){
+    Text(
+        text = header,
+        color = Color.Black,
+        fontSize = 18.sp,
+        fontFamily = robotoFamily,
+        fontWeight = FontWeight(700),
+        modifier = Modifier.padding(0.dp),
+        lineHeight = 16.sp
+    )
+}
+
+@Composable
+fun NewsText(
+    text: String
+){
+    Text(
+        text = text,
+        color = Color.Black,
+        fontSize = 14.sp,
+        fontFamily = robotoFamily,
+        fontWeight = FontWeight(400),
+        modifier = Modifier.padding(0.dp),
+        lineHeight = 14.sp
+    )
 }
 

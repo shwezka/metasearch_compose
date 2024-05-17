@@ -235,6 +235,7 @@ fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO
 
     val deferredTasks = news.documents.map { new ->
         async {
+            val newId = new.id
             val newsSourceId = new.getString("newsSourceId") ?: ""
             val sourceResult = db.collection("sources").document(newsSourceId).get().await()
             val source = sourceResult.getString("name") ?: ""
@@ -247,7 +248,7 @@ fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO
             val newsDate = new.getString("newsDate") ?: ""
             val newsTheme = new.getString("newsTheme") ?: ""
             val newsPic = new.getString("imageSource") ?: ""
-            val newsGot = News(newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
+            val newsGot = News(newId, newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
             vector.setSize(news.size())
             vector[counter] = newsGot
             counter++

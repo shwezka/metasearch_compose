@@ -1,5 +1,6 @@
 package com.example.metasearch_compose.bottom_nav
 
+
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -15,6 +16,7 @@ import com.example.metasearch_compose.screens.ProfileSet
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
 import com.example.metasearch_compose.screens.appscreens.FavScreen
+import com.example.metasearch_compose.screens.appscreens.FullScreenNew
 import com.example.metasearch_compose.screens.appscreens.HomeScreen
 import com.example.metasearch_compose.screens.appscreens.ProfileScreen
 import com.example.metasearch_compose.screens.appscreens.SearchScreen
@@ -25,6 +27,7 @@ fun NavGraph(
     navHostController: NavHostController,
     entryPoint: String,
     user: Users,
+    newsVector: Vector<News>
 ){
     NavHost(navController = navHostController, startDestination = entryPoint) {
         composable(
@@ -90,7 +93,14 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
-            HomeScreen()
+//            backStackEntry ->
+//            val index = backStackEntry.arguments!!.getString("index")?.toInt()
+//            Log.d("vl", "input 1) ${index}, 2) ${backStackEntry.arguments!!.getString("index")}")
+            HomeScreen(
+                onNavigateToFullNew = {navHostController.navigate("fullNew/{index}")},
+                newsVector,
+                navHostController
+            )
         }
         composable(
             route = "search",
@@ -115,6 +125,16 @@ fun NavGraph(
                 user,
                 onNavigateToProf = {navHostController.navigate("prof")}
             )
+        }
+        composable(
+            route = "fullNew/{index}",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ) { backStackEntry ->
+            val index = backStackEntry.arguments?.getString("index")?.toIntOrNull()
+            if (index != null) {
+                FullScreenNew(newsVector[index])
+            }
         }
     }
 }
