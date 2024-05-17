@@ -42,6 +42,10 @@ import com.example.metasearch_compose.parts.NewsCard
 import com.example.metasearch_compose.parts.NewsTextCard
 import com.example.metasearch_compose.parts.robotoFamily
 import java.util.Vector
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 @Composable
 fun HomeScreen(
@@ -52,6 +56,22 @@ fun HomeScreen(
     var dropMenuExp by remember { mutableStateOf(false) }
     var viewType by remember { mutableIntStateOf(1) }
     var dropDownMenuIconId by remember { mutableIntStateOf(R.drawable.cards_view2) }
+    var onlyMediaVector by remember { mutableStateOf(Vector<News>()) }
+    var mediaCounter by remember { mutableStateOf(0) }
+
+//    for (i in 0 .. newsVector.size) {
+//        if (newsVector[i].newsImage!="") {
+//            mediaCounter++
+//        }
+//    }
+//
+//    onlyMediaVector.setSize(mediaCounter)
+//    Log.d(TAG, "onlyMediaVector size: ${onlyMediaVector.size}")
+
+    Log.d(TAG, "Размер вектора с новостями: ${newsVector.size}")
+    Log.d(TAG, "Размер вектора с новостями у которых есть картинка: ${newsVector.filter { it.newsImage!="" }.size}")
+
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -170,35 +190,88 @@ fun HomeScreen(
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(18.dp))
+                    Row(
+                        modifier = Modifier
+                            .clickable {
+                                viewType = 3
+                                dropMenuExp = false
+                                dropDownMenuIconId = R.drawable.cards_view2
+                            }
+                    ) {
+                        if(viewType == 3){
+                            Image(
+                                painter = painterResource(id = R.drawable.media_view_bold),
+                                contentDescription = null,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(18.dp))
+                            Text(
+                                text = "Media",
+                                fontFamily = robotoFamily,
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight(700)
+                            )
+                        } else{
+                            Image(
+                                painter = painterResource(id = R.drawable.media_view),
+                                contentDescription = null,
+                                modifier = Modifier.size(22.dp)
+                            )
+                            Spacer(modifier = Modifier.width(18.dp))
+                            Text(
+                                text = "Media",
+                                fontFamily = robotoFamily,
+                                fontSize = 18.sp,
+                                color = Color.Black,
+                                fontWeight = FontWeight(400)
+                            )
+                        }
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(13.dp))
+            if(viewType == 3){
+                LazyColumn {
+                    Log.d(TAG, "Размер вектора с картинками ${newsVector.filter { it.newsImage!=""}.size}")
+                    Log.d(TAG, "Вектор с картинками ${newsVector.filter { it.newsImage!=""}}")
+                    items(newsVector.filter { it.newsImage!=""}.size) {
+                        index ->
+                        val newsItem = newsVector.filter { it.newsImage!=""}.getOrNull(index)
+                        newsItem?.let {
+                            if(newsItem.newsImage!=""){
+                                NewsCard(
+                                    it,
+                                    lambda = { navHostController.navigate("fullNew/${index}") }
+                                )
+                                Log.d("shw", "$index")
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(12.dp))
+                        HorizontalDivider(Modifier.fillMaxWidth())
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+                }
+            }
             LazyColumn {
                 items(newsVector.size) { index ->
 
                     val newsItem = newsVector.getOrNull(index)
                     newsItem?.let {
-                        when(viewType) {
-                            1 -> {
-                                NewsCard(
-                                    it,
-                                    lambda = { navHostController.navigate("fullNew/${index}") }
-                                )
-                                Log.d("shw", "$index")
-                            }
-                            2->{
-                                NewsTextCard(
-                                    it,
-                                    lambda = { navHostController.navigate("fullNew/${index}") }
-                                )
-                                Log.d("shw", "$index")
-                            }
-                            else -> {
-                                NewsCard(
-                                    it,
-                                    lambda = { navHostController.navigate("fullNew/${index}") })
-
-                            }
+                        if(viewType ==1){
+                            NewsCard(
+                                it,
+                                lambda = { navHostController.navigate("fullNew/${index}") }
+                            )
+                            Log.d("shw", "$index")
+                        }
+                        if(viewType == 2){
+                            NewsTextCard(
+                                it,
+                                lambda = { navHostController.navigate("fullNew/${index}") }
+                            )
+                            Log.d("shw", "$index")
                         }
 
                     }
