@@ -130,9 +130,9 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ) { backStackEntry ->
-            val index = backStackEntry.arguments?.getString("index")?.toIntOrNull()
+            val index = backStackEntry.arguments?.getString("index")
             if (index != null) {
-                FullScreenNew(newsVector[index])
+                FullScreenNew(index)
             }
         }
     }

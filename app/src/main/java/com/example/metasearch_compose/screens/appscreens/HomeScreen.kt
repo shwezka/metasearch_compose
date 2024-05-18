@@ -196,7 +196,7 @@ fun HomeScreen(
                             .clickable {
                                 viewType = 3
                                 dropMenuExp = false
-                                dropDownMenuIconId = R.drawable.cards_view2
+                                dropDownMenuIconId = R.drawable.media_view
                             }
                     ) {
                         if(viewType == 3){
@@ -233,18 +233,20 @@ fun HomeScreen(
             }
             Spacer(modifier = Modifier.height(13.dp))
             if(viewType == 3){
+                val filteredNewsVector = newsVector.filter { it.newsImage!=""}
+
                 LazyColumn {
-                    Log.d(TAG, "Размер вектора с картинками ${newsVector.filter { it.newsImage!=""}.size}")
-                    Log.d(TAG, "Вектор с картинками ${newsVector.filter { it.newsImage!=""}}")
-                    items(newsVector.filter { it.newsImage!=""}.size) {
-                        index ->
-                        val newsItem = newsVector.filter { it.newsImage!=""}.getOrNull(index)
+                    Log.d(TAG, "Размер вектора с картинками ${filteredNewsVector.size}")
+                    Log.d(TAG, "Вектор с картинками $filteredNewsVector")
+                    items(filteredNewsVector.size) { index ->
+                        val newsItem = filteredNewsVector.getOrNull(index)
                         newsItem?.let {
-                            if(newsItem.newsImage!=""){
+                            if (newsItem.newsImage != "") {
                                 NewsCard(
                                     it,
-                                    lambda = { navHostController.navigate("fullNew/${index}") }
+                                    lambda = { navHostController.navigate("fullNew/${it.newsId}") }
                                 )
+
                                 Log.d("shw", "$index")
                             }
                         }
@@ -262,14 +264,14 @@ fun HomeScreen(
                         if(viewType ==1){
                             NewsCard(
                                 it,
-                                lambda = { navHostController.navigate("fullNew/${index}") }
+                                lambda = { navHostController.navigate("fullNew/${it.newsId}") }
                             )
                             Log.d("shw", "$index")
                         }
                         if(viewType == 2){
                             NewsTextCard(
                                 it,
-                                lambda = { navHostController.navigate("fullNew/${index}") }
+                                lambda = { navHostController.navigate("fullNew/${it.newsId}") }
                             )
                             Log.d("shw", "$index")
                         }

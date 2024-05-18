@@ -197,8 +197,11 @@ fun addNews(){
 }
 
 
-fun getNews(callback: (News) -> Unit) {
-    db.collection("news").document("Fpq02xy7EOLE9cYyqzZr").get()
+fun getNews(
+    callback: (News) -> Unit,
+    newId: String
+    ) {
+    db.collection("news").document(newId).get()
         .addOnSuccessListener { new ->
             val newsSourceId = new.getString("newsSourceId") ?: ""
             db.collection("sources").document(newsSourceId).get()
@@ -213,7 +216,7 @@ fun getNews(callback: (News) -> Unit) {
                     val newsDate = new.getString("newsDate") ?: ""
                     val newsTheme = new.getString("newsTheme") ?: ""
                     val newsPic = new.getString("imageSource") ?: ""
-                    val news = News(newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
+                    val news = News(newId,newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
                     Log.d(TAG, "News data: $news")
                     callback(news)
                 }
