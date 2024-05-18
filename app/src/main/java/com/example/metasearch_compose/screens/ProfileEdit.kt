@@ -179,36 +179,44 @@ fun ProfileEdit(
                             modifier = Modifier.clickable { launcher.launch("image/*") }
                         )
                         if (user.pictureUri != "") {
-                            Image(
-                                painter = profilePic,
-                                contentDescription = null,
-                                modifier = Modifier.size(151.dp)
-                            )
-                        } else {
-                            if (imageUri != null) {
-                                imageUri?.let {
-                                    if (Build.VERSION.SDK_INT < 28) {
-                                        bitmap.value =
-                                            MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-                                    } else {
-                                        val source = ImageDecoder.createSource(context.contentResolver, it)
-                                        bitmap.value = ImageDecoder.decodeBitmap(source)
-                                    }
-
-                                    bitmap.value?.let { btm ->
-                                        Image(
-                                            bitmap = btm.asImageBitmap(),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(151.dp)
-                                        )
-                                    }
-                                }
-                            } else {
+                            if(user.pictureUri == imageUri.toString()) {
                                 Image(
-                                    painter = painterResource(id = defaultImageResourceId),
+                                    painter = profilePic,
                                     contentDescription = null,
                                     modifier = Modifier.size(151.dp)
                                 )
+                            } else {
+                                if (imageUri != null) {
+                                    imageUri?.let {
+                                        if (Build.VERSION.SDK_INT < 28) {
+                                            bitmap.value =
+                                                MediaStore.Images.Media.getBitmap(
+                                                    context.contentResolver,
+                                                    it
+                                                )
+                                        } else {
+                                            val source = ImageDecoder.createSource(
+                                                context.contentResolver,
+                                                it
+                                            )
+                                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                                        }
+
+                                        bitmap.value?.let { btm ->
+                                            Image(
+                                                bitmap = btm.asImageBitmap(),
+                                                contentDescription = null,
+                                                modifier = Modifier.size(151.dp)
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    Image(
+                                        painter = painterResource(id = defaultImageResourceId),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(151.dp)
+                                    )
+                                }
                             }
                         }
                         Image(

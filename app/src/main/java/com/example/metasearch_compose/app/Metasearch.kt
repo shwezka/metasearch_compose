@@ -60,7 +60,7 @@ fun MetasearchApp(){
         currentRoute != "reg" &&
         currentRoute != "recovery" &&
         currentRoute != "profSet" &&
-        currentRoute != "profEdit" // Добавлено условие для страницы "settings"
+        currentRoute != "zat" // Добавлено условие для страницы "settings"
     ){
         Scaffold(
             bottomBar = {
