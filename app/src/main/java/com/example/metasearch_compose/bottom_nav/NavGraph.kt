@@ -108,7 +108,9 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
-            SearchScreen()
+            SearchScreen(
+                navHostController
+            )
         }
         composable(
             route = "favs",
