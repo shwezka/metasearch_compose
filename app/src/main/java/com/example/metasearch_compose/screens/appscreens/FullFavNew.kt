@@ -1,5 +1,7 @@
 package com.example.metasearch_compose.screens.appscreens
 
+import com.example.metasearch_compose.firebase_parts.getFavNew
+
 import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -24,6 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.metasearch_compose.firebase_parts.getNews
+import com.example.metasearch_compose.parts.FavsUpperRow
 import com.example.metasearch_compose.parts.News
 import com.example.metasearch_compose.parts.NewsHeaderText
 import com.example.metasearch_compose.parts.NewsProvider
@@ -36,7 +39,7 @@ import java.util.Vector
 
 @Preview(showBackground = true)
 @Composable
-fun FullScreenNew(
+fun FullFavScreenNew(
     newId: String?,
 //    newsVector: Vector<News>
 //    news: News
@@ -44,7 +47,7 @@ fun FullScreenNew(
     var news by remember { mutableStateOf(News()) }
     LaunchedEffect(key1 = true) {
         if (newId != null) {
-            getNews(newId = newId, callback = {newData ->
+            getFavNew(newId = newId, callback = { newData ->
                 news = newData
             }
             )
@@ -61,7 +64,7 @@ fun FullScreenNew(
                 .padding(top = 38.dp, start = 24.dp, end = 24.dp, bottom = 0.dp),
             verticalArrangement = Arrangement.spacedBy(18.dp)
         ) {
-            NewsUpperRow(news = news)
+            FavsUpperRow(news = news)
             NewsHeaderText(header = news.newsTitle)
             if(news.newsImage!= ""){
                 val newsPic = rememberImagePainter(

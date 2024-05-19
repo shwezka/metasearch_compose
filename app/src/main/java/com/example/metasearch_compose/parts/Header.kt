@@ -27,13 +27,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,8 +46,10 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import coil.transform.RoundedCornersTransformation
 import com.example.metasearch_compose.R
+import com.example.metasearch_compose.firebase_parts.addNewsToFavs
+import com.example.metasearch_compose.firebase_parts.deleteFromFavs
+
 
 
 @Composable
@@ -512,12 +513,199 @@ fun NewsTextCard(
         )
     }
 }
+@Preview(showBackground = true)
+@Composable
+fun NewsImageCard(
+    @PreviewParameter(NewsProvider::class) news: News,
+    lambda: () -> Unit
+){
+    val newsPic = rememberImagePainter(
+        data = news.newsImage,
+        builder = {
+            crossfade(true)
+        }
+    )
+    Card(
+        modifier = Modifier
+            .height(100.dp)
+            .width(189.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(0f),
+        onClick = lambda
+    ) {
+        Image(
+            painter = newsPic,
+            contentDescription = null,
+            modifier = Modifier
+                .height(100.dp)
+                .width(189.dp)
+        )
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun FavsCard(
+    @PreviewParameter(NewsProvider::class) news: News,
+//    news: News,
+    lambda: () -> Unit
+
+){
+    Card(
+        modifier = Modifier
+            .width(346.dp)
+            .height(260.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(0f),
+        onClick = lambda
+    ){
+        val sourcePic = rememberImagePainter(
+            data = news.source.sourcePic,
+            builder = {
+                crossfade(true)
+            }
+        )
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(30.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = sourcePic,
+                contentDescription = null,
+                modifier = Modifier.size(30.dp)
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+            Column{
+                Text(
+                    text = "${news.newsTheme}  ${news.source.sourceName}",
+                    color = Color.Black,
+                    fontSize = 12.sp,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(400),
+                    modifier = Modifier.padding(0.dp),
+                    lineHeight = 1.sp
+                )
+                Text(
+                    text = news.newsDate,
+                    color = Color.Gray,
+                    fontSize = 10.sp,
+                    fontFamily = robotoFamily,
+                    fontWeight = FontWeight(400),
+                    modifier = Modifier.padding(0.dp),
+                    lineHeight = 1.sp
+                )
+            }
+            Spacer(modifier = Modifier.width(190.dp))
+            Image(
+                painter = painterResource(id = R.drawable.cross),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(22.dp)
+                    .clickable {
+                        deleteFromFavs(news)
+                    }
+            )
+        }
+        Spacer(modifier = Modifier.height(5.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = news.newsTitle,
+                color = Color.Black,
+                fontWeight = FontWeight(500),
+                fontSize = 14.sp,
+                lineHeight = 16.sp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp)
+            )
+        }
+        Text(
+            text = news.newsShortenText,
+            fontFamily = robotoFamily,
+            fontSize = 12.sp,
+            fontWeight = FontWeight(400),
+            color = Color.Black,
+            lineHeight = 14.sp
+        )
+    }
+}
+
+@Composable
+fun FavsUpperRow(
+    @PreviewParameter(NewsProvider::class) news: News,
+){
+    var addToFav by remember { mutableIntStateOf(R.drawable.favs2) }
+    val sourcePic = rememberImagePainter(
+        data = news.source.sourcePic,
+        builder = {
+            crossfade(true)
+        }
+    )
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .height(30.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(painter = painterResource(id = R.drawable.back), contentDescription = null)
+        Spacer(modifier = Modifier.width(5.dp))
+        Image(
+            painter = sourcePic,
+            contentDescription = null,
+            modifier = Modifier.size(30.dp)
+        )
+        Spacer(modifier = Modifier.width(12.dp))
+        Column{
+            Text(
+                text = "${news.newsTheme}  ${news.source.sourceName}",
+                color = Color.Black,
+                fontSize = 12.sp,
+                fontFamily = robotoFamily,
+                fontWeight = FontWeight(400),
+                modifier = Modifier.padding(0.dp),
+                lineHeight = 1.sp
+            )
+            Text(
+                text = news.newsDate,
+                color = Color.Gray,
+                fontSize = 10.sp,
+                fontFamily = robotoFamily,
+                fontWeight = FontWeight(400),
+                modifier = Modifier.padding(0.dp),
+                lineHeight = 1.sp
+            )
+        }
+        Spacer(modifier = Modifier.width(150.dp))
+        Image(
+            painter = painterResource(id = R.drawable.share),
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Image(
+            painter = painterResource(id = addToFav),
+            contentDescription = null,
+            modifier = Modifier
+                .size(20.dp)
+                .clickable {
+                    deleteFromFavs(news)
+                    addToFav = R.drawable.favs
+                }
+        )
+    }
+}
 
 
 @Composable
 fun NewsUpperRow(
     @PreviewParameter(NewsProvider::class) news: News,
 ){
+    var addToFav by remember { mutableIntStateOf(R.drawable.favs) }
     val sourcePic = rememberImagePainter(
         data = news.source.sourcePic,
         builder = {
@@ -558,7 +746,7 @@ fun NewsUpperRow(
                 lineHeight = 1.sp
             )
         }
-        Spacer(modifier = Modifier.width(170.dp))
+        Spacer(modifier = Modifier.width(150.dp))
         Image(
             painter = painterResource(id = R.drawable.share),
             contentDescription = null,
@@ -566,9 +754,14 @@ fun NewsUpperRow(
         )
         Spacer(modifier = Modifier.width(5.dp))
         Image(
-            painter = painterResource(id = R.drawable.favs),
+            painter = painterResource(id = addToFav),
             contentDescription = null,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier
+                .size(20.dp)
+                .clickable {
+                    addNewsToFavs(news)
+                    addToFav = R.drawable.favs2
+                }
         )
     }
 }

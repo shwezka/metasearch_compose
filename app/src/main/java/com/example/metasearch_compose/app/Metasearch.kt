@@ -20,6 +20,7 @@ import com.example.metasearch_compose.bottom_nav.BottomNavigationBar
 import com.example.metasearch_compose.bottom_nav.NavGraph
 import com.example.metasearch_compose.firebase_parts.getAllNews
 import com.example.metasearch_compose.firebase_parts.getDataFromDB
+import com.example.metasearch_compose.firebase_parts.getFavs
 import com.example.metasearch_compose.parts.News
 import com.example.metasearch_compose.parts.Users
 import com.example.metasearch_compose.screens.LoginPage
@@ -38,6 +39,7 @@ fun MetasearchApp(){
     val navController = rememberNavController()
     var entryPoint by remember { mutableStateOf("login") }
     var newsVector by remember { mutableStateOf(Vector<News>()) }
+    var favsVector by remember { mutableStateOf(Vector<News>()) }
 
     if(FirebaseAuth.getInstance().currentUser != null){
         LaunchedEffect(key1 = true) {
@@ -48,6 +50,11 @@ fun MetasearchApp(){
                 newsVector.setSize(newsData.size)
                 newsVector = newsData
             }
+
+//            getFavs { favNewsData->
+//                favsVector.setSize(favNewsData.size)
+//                favsVector = favNewsData
+//            }
         }
         entryPoint = "home"
     }
@@ -67,7 +74,7 @@ fun MetasearchApp(){
                 BottomNavigationBar(navController = navController)
             }
         ) {
-            NavGraph(navHostController = navController, entryPoint = entryPoint, user, newsVector)
+            NavGraph(navHostController = navController, entryPoint = entryPoint, user, newsVector, favsVector)
         }
     } else {
         Surface(

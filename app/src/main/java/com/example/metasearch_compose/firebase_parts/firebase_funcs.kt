@@ -179,19 +179,20 @@ fun getDataFromDB(callback: (Users) -> Unit) {
         }
 }
 
-fun addNews(){
-    val ref = db.collection("news").document()
+fun addNewsToFavs(news:News){
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    val ref = db.collection("favs").document(userId!!).collection("favNews").document()
 
     ref.set(
         mapOf(
-            "newsTitle" to "Россия нашла альтернативу продаже пиломатериалов в Европу Кто теперь вместо Европы покупает российскую древесину и фанкряж",
-            "newsShortenText" to "В 2023 году в топ-10 стран — импортеров российских пиломатериалов не осталось ни одной европейской страны. Российские лесопромышленники заменили рынки сбыта на азиатские страны, их доля в экспорте выросла до 98% Объем экспорта российских пиломатериалов в 2023 году снизился на 10% относительно предыдущего года и составил 20,7 млн куб. м, следует из статистики федерального лесоучетного учреждения «Рослесинфорг»",
-            "newsFullText" to "В 2023 году в топ-10 стран — импортеров российских пиломатериалов не осталось ни одной европейской страны. Российские лесопромышленники заменили рынки сбыта на азиатские страны, их доля в экспорте выросла до 98%\n\nОбъем экспорта российских пиломатериалов в 2023 году снизился на 10% относительно предыдущего года и составил 20,7 млн куб. м, следует из статистики федерального лесоучетного учреждения «Рослесинфорг», с которой ознакомился РБК. В 2022 году объем экспорта пиломатериалов составил 23 млн куб. м.",
-            "newsSourceId" to "eR6BNtv0z6PafLIMBjeZ",
-            "newsTheme" to "Россия",
-            "newsDate" to "02 фев, 01:32",
-            "imageSource" to "https://firebasestorage.googleapis.com/v0/b/metasearch-compose.appspot.com/o/news_pictures%2Fnews1_image.jpg?alt=media&token=df80852c-0d23-4215-8330-6ce9a29b4741",
-            "sourceIcon" to ""
+            "newsId" to news.newsId,
+            "newsTitle" to news.newsTitle,
+            "newsShortenText" to news.newsShortenText,
+            "newsFullText" to news.newsText,
+            "newsSourceId" to news.source.sourceId,
+            "newsTheme" to news.newsTheme,
+            "newsDate" to news.newsDate,
+            "imageSource" to news.newsImage
         )
     )
 }
@@ -208,7 +209,7 @@ fun getNews(
                 .addOnSuccessListener { sourceResult ->
                     val source = sourceResult.getString("name") ?: ""
                     val sourcePic = sourceResult.getString("image_pic") ?: ""
-                    val sourceGot = Sources(source, sourcePic)
+                    val sourceGot = Sources(newsSourceId,source, sourcePic)
                     Log.d(TAG, "Successfully received source: $sourceGot")
                     val newsTitle = new.getString("newsTitle") ?: ""
                     val newsShortenText = new.getString("newsShortenText") ?: ""
@@ -243,7 +244,7 @@ fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO
             val sourceResult = db.collection("sources").document(newsSourceId).get().await()
             val source = sourceResult.getString("name") ?: ""
             val sourcePic = sourceResult.getString("image_pic") ?: ""
-            val sourceGot = Sources(source, sourcePic)
+            val sourceGot = Sources(newsSourceId,source, sourcePic)
 
             val newsTitle = new.getString("newsTitle") ?: ""
             val newsShortenText = new.getString("newsShortenText") ?: ""
@@ -263,8 +264,80 @@ fun getAllNews(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO
     callback(vector)
 }
 
-//private fun codeGenerator() : Int{
-//    val random = Random.Default
-//    return (100000..999999).random(random)
-//}
+fun getFavNew(
+    callback: (News) -> Unit,
+    newId: String
+) {
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+    db.collection("favs").document(userId!!).collection("favNews").document(newId).get()
+        .addOnSuccessListener { new ->
+            val newsSourceId = new.getString("newsSourceId") ?: ""
+            db.collection("sources").document(newsSourceId).get()
+                .addOnSuccessListener { sourceResult ->
+                    val source = sourceResult.getString("name") ?: ""
+                    val sourcePic = sourceResult.getString("image_pic") ?: ""
+                    val sourceGot = Sources(newsSourceId,source, sourcePic)
+                    Log.d(TAG, "Successfully received source: $sourceGot")
+                    val newsTitle = new.getString("newsTitle") ?: ""
+                    val newsShortenText = new.getString("newsShortenText") ?: ""
+                    val newsFullText = new.getString("newsFullText") ?: ""
+                    val newsDate = new.getString("newsDate") ?: ""
+                    val newsTheme = new.getString("newsTheme") ?: ""
+                    val newsPic = new.getString("imageSource") ?: ""
+                    val news = News(newId,newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
+                    Log.d(TAG, "News data: $news")
+                    callback(news)
+                }
+                .addOnFailureListener {
+                    Log.d(TAG, "Failed to get source")
+                }
+        }
+        .addOnFailureListener {
+            Log.d(TAG, "Failed to get news")
+        }
+}
+
+fun getFavs(callback: (Vector<News>) -> Unit) = CoroutineScope(Dispatchers.IO).launch{
+    val vector = Vector<News>()
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+    var counter = 0
+
+    val news = db.collection("favs").document(userId!!).collection("favNews").get().await()
+
+    val deferredTasks = news.documents.map { new ->
+        async {
+            Log.d(TAG, "${new.data}")
+            val newId = new.id
+            val newsSourceId = new.getString("newsSourceId") ?: ""
+            val sourceResult = db.collection("sources").document(newsSourceId).get().await()
+            val source = sourceResult.getString("name") ?: ""
+            val sourcePic = sourceResult.getString("image_pic") ?: ""
+            val sourceGot = Sources(newsSourceId,source, sourcePic)
+
+            val newsTitle = new.getString("newsTitle") ?: ""
+            val newsShortenText = new.getString("newsShortenText") ?: ""
+            val newsFullText = new.getString("newsFullText") ?: ""
+            val newsDate = new.getString("newsDate") ?: ""
+            val newsTheme = new.getString("newsTheme") ?: ""
+            val newsPic = new.getString("imageSource") ?: ""
+            val newsGot = News(newId, newsTitle, newsShortenText, newsFullText, newsDate, newsTheme, newsPic, source = sourceGot)
+            vector.setSize(news.size())
+            vector[counter] = newsGot
+            counter++
+        }
+    }
+
+    deferredTasks.awaitAll()
+
+    callback(vector)
+}
+
+fun deleteFromFavs(
+    news: News
+){
+    val userId = FirebaseAuth.getInstance().currentUser?.uid
+
+    val favRef = db.collection("favs").document(userId!!).collection("favNews").document(news.newsId).delete()
+}
 

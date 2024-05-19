@@ -24,6 +24,7 @@ data class Users(
 }
 
 data class Sources(
+    val sourceId: String ="",
     val sourceName: String = "",
     var sourcePic: String = ""
 )
@@ -40,6 +41,7 @@ data class News(
 )
 
 val previewSource = Sources(
+    "",
     "КИЛ",
     "https://firebasestorage.googleapis.com/v0/b/metasearch-compose.appspot.com/o/source_icons%2FKIL_logo.svg%201.png?alt=media&token=efd50bac-2c9b-4539-b979-105f0c182064"
 )

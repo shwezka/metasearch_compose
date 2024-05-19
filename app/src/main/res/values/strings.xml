@@ -50,5 +50,6 @@
     <string name="search_bottom_bar_name">Search</string>
     <string name="favs_bottom_bar_name">Favorite</string>
     <string name="news_list">Лента Новостей</string>
+    <string name="favs_list">Избранное</string>
 
 </resources>

@@ -4,7 +4,9 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,24 +16,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.DropdownMenu
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.Surface
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -42,10 +43,7 @@ import com.example.metasearch_compose.parts.NewsCard
 import com.example.metasearch_compose.parts.NewsTextCard
 import com.example.metasearch_compose.parts.robotoFamily
 import java.util.Vector
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import com.example.metasearch_compose.parts.NewsImageCard
 
 @Composable
 fun HomeScreen(
@@ -56,8 +54,6 @@ fun HomeScreen(
     var dropMenuExp by remember { mutableStateOf(false) }
     var viewType by remember { mutableIntStateOf(1) }
     var dropDownMenuIconId by remember { mutableIntStateOf(R.drawable.cards_view2) }
-    var onlyMediaVector by remember { mutableStateOf(Vector<News>()) }
-    var mediaCounter by remember { mutableStateOf(0) }
 
 //    for (i in 0 .. newsVector.size) {
 //        if (newsVector[i].newsImage!="") {
@@ -234,25 +230,25 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(13.dp))
             if(viewType == 3){
                 val filteredNewsVector = newsVector.filter { it.newsImage!=""}
-
-                LazyColumn {
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
                     Log.d(TAG, "Размер вектора с картинками ${filteredNewsVector.size}")
                     Log.d(TAG, "Вектор с картинками $filteredNewsVector")
                     items(filteredNewsVector.size) { index ->
                         val newsItem = filteredNewsVector.getOrNull(index)
                         newsItem?.let {
                             if (newsItem.newsImage != "") {
-                                NewsCard(
+                                NewsImageCard(
                                     it,
                                     lambda = { navHostController.navigate("fullNew/${it.newsId}") }
                                 )
-
                                 Log.d("shw", "$index")
                             }
                         }
-                        Spacer(modifier = Modifier.height(12.dp))
-                        HorizontalDivider(Modifier.fillMaxWidth())
-                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
             }
@@ -266,6 +262,9 @@ fun HomeScreen(
                                 it,
                                 lambda = { navHostController.navigate("fullNew/${it.newsId}") }
                             )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            HorizontalDivider(Modifier.fillMaxWidth())
+                            Spacer(modifier = Modifier.height(12.dp))
                             Log.d("shw", "$index")
                         }
                         if(viewType == 2){
@@ -273,13 +272,14 @@ fun HomeScreen(
                                 it,
                                 lambda = { navHostController.navigate("fullNew/${it.newsId}") }
                             )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            HorizontalDivider(Modifier.fillMaxWidth())
+                            Spacer(modifier = Modifier.height(12.dp))
                             Log.d("shw", "$index")
                         }
 
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
-                    HorizontalDivider(Modifier.fillMaxWidth())
-                    Spacer(modifier = Modifier.height(12.dp))
+
                 }
             }
 

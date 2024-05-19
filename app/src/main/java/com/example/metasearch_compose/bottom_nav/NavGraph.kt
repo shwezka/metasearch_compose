@@ -16,6 +16,7 @@ import com.example.metasearch_compose.screens.ProfileSet
 import com.example.metasearch_compose.screens.RecoveryScreen
 import com.example.metasearch_compose.screens.RegScreen
 import com.example.metasearch_compose.screens.appscreens.FavScreen
+import com.example.metasearch_compose.screens.appscreens.FullFavScreenNew
 import com.example.metasearch_compose.screens.appscreens.FullScreenNew
 import com.example.metasearch_compose.screens.appscreens.HomeScreen
 import com.example.metasearch_compose.screens.appscreens.ProfileScreen
@@ -27,7 +28,8 @@ fun NavGraph(
     navHostController: NavHostController,
     entryPoint: String,
     user: Users,
-    newsVector: Vector<News>
+    newsVector: Vector<News>,
+    favNewsVector: Vector<News>
 ){
     NavHost(navController = navHostController, startDestination = entryPoint) {
         composable(
@@ -113,7 +115,20 @@ fun NavGraph(
             enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
             exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
         ){
-            FavScreen()
+            FavScreen(
+//                favNewsVector,
+                navHostController
+            )
+        }
+        composable(
+            route = "fullFavNew/{index}",
+            enterTransition = { fadeIn(animationSpec = tween(durationMillis = 0)) },
+            exitTransition = { fadeOut(animationSpec = tween(durationMillis = 0)) }
+        ) { backStackEntry ->
+            val index = backStackEntry.arguments?.getString("index")
+            if (index != null) {
+                FullFavScreenNew(index)
+            }
         }
         composable(
             route = "profEdit",
