@@ -693,8 +693,13 @@ fun FavsUpperRow(
             modifier = Modifier
                 .size(20.dp)
                 .clickable {
-                    deleteFromFavs(news)
-                    addToFav = R.drawable.favs
+                    if(addToFav == R.drawable.favs){
+                        addNewsToFavs(news)
+                        addToFav = R.drawable.favs2
+                    }else{
+                        deleteFromFavs(news)
+                        addToFav = R.drawable.favs
+                    }
                 }
         )
     }
@@ -759,8 +764,14 @@ fun NewsUpperRow(
             modifier = Modifier
                 .size(20.dp)
                 .clickable {
-                    addNewsToFavs(news)
-                    addToFav = R.drawable.favs2
+                    if(addToFav == R.drawable.favs){
+                        addNewsToFavs(news)
+                        addToFav = R.drawable.favs2
+                    }else{
+                        deleteFromFavs(news)
+                        addToFav = R.drawable.favs
+                    }
+
                 }
         )
     }
